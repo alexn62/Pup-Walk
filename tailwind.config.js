@@ -8,9 +8,15 @@ module.exports = {
       colors: {
         kLightGrey: '#C5C5C5',
         kWhiteDark: '#F4F4F4',
-        kBlue:'#4971FF'
+        kBlue:'#4971FF',
+        kBlueLight: '#EAEEFF',
+        kBlueDark: '#3A59C7',
+        kMidBlue: '#89A3FF',
+        kGreen: '#67C73A',
+        kGreenLight: '#F1FFEE',
+        kMidGreen: '#88DF5F',
       },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/line-clamp')],
 };
