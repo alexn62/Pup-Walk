@@ -8,10 +8,10 @@ import MainButton from './MainButton';
 interface NewPostItemProps {
   ownerName: string;
   ownerRating: number;
-  // ownerProfilePhoto: string;
+  ownerProfilePhoto: string;
   dogName: string;
   dogDescription: string;
-  // dogPhoto: string;
+  dogPhoto: string;
   details: string;
   mainLocation: string;
   secondaryLocation: string;
@@ -31,8 +31,10 @@ const NewPostItem: FC<NewPostItemProps> = (props) => {
     <div className="shadow-lg rounded-2xl bg-white flex flex-col justify-between items-start p-4 space-y-3">
       <div className="w-full flex justify-end">
         <div className="flex mr-auto">
-          <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full mr-2"></div>
-          <div className="flex flex-col justify-between">
+          <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full mr-2 overflow-hidden">
+            <img src={props.ownerProfilePhoto} alt='' className='object-cover h-full'></img>
+          </div>
+          <div className="flex flex-col justify-between items-start">
             <p className="font-semibold text-kBlue text-lg">{props.ownerName}</p>
             <div className="flex">{stars}</div>
           </div>
@@ -42,7 +44,10 @@ const NewPostItem: FC<NewPostItemProps> = (props) => {
             <p className="font-semibold text-lg">{props.dogName}</p>
             <p className="text-sm">{props.dogDescription}</p>
           </div>
-          <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full ml-2"></div>
+          <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full ml-2 overflow-hidden">
+          <img src={props.dogPhoto} alt='' className='object-cover h-full'></img>
+
+          </div>
         </div>
 
         <BsThreeDots className="ml-2 hover:cursor-pointer" />
