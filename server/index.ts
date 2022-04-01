@@ -5,17 +5,20 @@ import mongoose from 'mongoose';
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
-const PORT: number = 4000;
-const HOST: string = 'http://localhost:';
-const url: string = `${HOST}${PORT}`;
+const SERVER_PORT = 4000;
+const HOST = 'localhost:';
+const DB_PORT = 27017;
+const DB_NAME = 'dogdb';
+const SERVER_URL = `http://${HOST}${SERVER_PORT}`;
 
-const startServer = async () => {
-  const DB_NAME: String = 'dogdb';
-  await mongoose.connect(`mongodb://localhost:27017/${DB_NAME}`);
+mongoose.connect(`mongodb://${HOST}${DB_PORT}/${DB_NAME}`);
 
-  server.listen(PORT, () => {
-    console.log(`🚀  Server ready at ${url}`);
+const startServer = async (): Promise<void> => {
+  server.listen(SERVER_PORT, () => {
+    console.log(`🚀  Server ready at ${SERVER_URL}`);
   });
 };
 
 startServer();
+
+export = server;

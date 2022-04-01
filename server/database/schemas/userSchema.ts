@@ -32,6 +32,12 @@ const userSchema = new mongoose.Schema({
   dogs: {
     type: Array,
     required: false,
+    default: [],
+  },
+  jobs: {
+    type: Array,
+    required: false,
+    default: [],
   },
 });
 

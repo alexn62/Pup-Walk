@@ -1,27 +1,122 @@
-import { addUser, getAllUsers } from '../database/queries';
+import * as dogQueries from '../database/queries/dogQueries';
+import * as userQueries from '../database/queries/userQueries';
+import * as jobQueries from '../database/queries/jobQueries';
+
+import { Dog } from '../interfaces/dog-interface';
+import { User } from '../interfaces/user-interface';
+import { Job } from '../interfaces/job-interface';
+
+interface AddUserInput {
+  email: string;
+  firstName: string;
+  lastName: string;
+  middleName?: string;
+  sex?: string;
+}
+
+interface AddDogInput {
+  owner: string;
+  name: string;
+  age: number;
+  sex: string;
+  dateAdded?: Date;
+  breed: string;
+  description: string;
+}
+
+interface AddJobInput {
+  user: string;
+  dog: string;
+  details: string;
+  longitude: number;
+  latitude: number;
+  duration: number;
+  hourlyPay: number;
+  startTime: string;
+}
 
 const res = {
   Query: {
-    getAllUsers: async (_: any, {}: {}, context: any, info: any) => {
-      const users = await getAllUsers();
-      return users;
+    getUser: async (_: any, { id }: { id: string }): Promise<User> => {
+      const user = await userQueries.getUser(id);
+      if (!user) {
+        throw new Error('User not found.');
+      }
+      return user;
+    },
+    getDog: async (_: any, { id }: { id: String }): Promise<Dog> => {
+      const dog = await dogQueries.getDog(id);
+      if (!dog) {
+        throw new Error('Dog not found.');
+      }
+      return dog;
+    },
+    getJob: async (_: any, { id }: { id: string }): Promise<Job> => {
+      const job = await jobQueries.getJob(id);
+      if (!job) {
+        throw new Error('Job not found.');
+      }
+      return job;
     },
   },
+
   Mutation: {
-    addUser: async (
-      _: any,
-      {
-        email,
-        firstName,
-        lastName,
-        middleName,
-      }: { email: String; firstName: String; lastName: String; middleName: String },
-      context: any,
-      info: any
-    ) => {
-      console.log(email);
-      const response = await addUser(email, firstName, lastName, middleName);
+    addUser: async (_: any, { email, firstName, lastName, middleName, sex }: AddUserInput) => {
+      // validate add user input
+      const response = await userQueries.addUser(email, firstName, lastName, middleName, sex);
       return response;
+    },
+
+    addDog: async (_: any, { owner, name, age, sex, dateAdded, breed, description }: AddDogInput) => {
+      // validate add dog input
+      const response = await dogQueries.addDog(owner, name, age, sex, breed, description, dateAdded);
+
+      return response;
+    },
+    addJob: async (
+      _: any,
+      { user, dog, details, longitude, latitude, duration, hourlyPay, startTime }: AddJobInput
+    ) => {
+      const response = await jobQueries.addJob(user, dog, details, longitude, latitude, duration, hourlyPay, startTime);
+      return response;
+    },
+  },
+
+  User: {
+    dogs: async (user: any) => {
+      const dogs = [];
+      for (let dogId of user.dogs) {
+        const dog = await res.Query.getDog(null, { id: dogId });
+        dogs.push(dog);
+      }
+      return dogs;
+    },
+  },
+
+  Dog: {
+    owner: async (dog: any) => {
+      return await res.Query.getUser(null, { id: dog.owner });
+    },
+  },
+
+  Job: {
+    location: (job: any) => {
+      return {
+        latitude: job.latitude,
+        longitude: job.longitude,
+      };
+    },
+    user: async (job: any) => {
+      return await res.Query.getUser(null, { id: job.user });
+    },
+    dog: async (job: any) => {
+      return await res.Query.getDog(null, { id: job.dog });
+    },
+    timePosted: (job: any) => {
+      return job.timePosted.toString();
+    },
+    startTime: (job: any) => {
+      return job.startTime.toString();
     },
   },
 };
