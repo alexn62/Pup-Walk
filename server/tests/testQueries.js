@@ -87,6 +87,7 @@ const addJob = gql`
   mutation Mutation(
     $user: String!
     $dog: String!
+    $title: String!
     $details: String!
     $latitude: Int!
     $longitude: Int!
@@ -98,6 +99,7 @@ const addJob = gql`
     addJob(
       user: $user
       dog: $dog
+      title: $title
       details: $details
       latitude: $latitude
       longitude: $longitude
@@ -116,6 +118,7 @@ const addJob = gql`
       }
       duration
       hourlyPay
+      title
       startTime
       status
       user {

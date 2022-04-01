@@ -9,6 +9,7 @@ const { Job } = require('../database/schemas/jobSchema');
 const testQueries = require('./testQueries');
 const userMocks = require('./mocks/users');
 const dogMocks = require('./mocks/dogs');
+const jobMocks = require('./mocks/jobs');
 const { expect } = require('chai');
 require('mocha');
 
@@ -47,7 +48,18 @@ const _addMockDog = async (server, dog) => {
 const _addMockJob = async (server, job) => {
   return await server.executeOperation({
     query: testQueries.addJob,
-    variables: {},
+    variables: {
+      user: job.userId,
+      dog: job.dogId,
+      details: job.details,
+      latitude: job.location.latitude,
+      longitude: job.location.longitude,
+      duration: job.duration,
+      hourlyPay: job.hourlyPay,
+      startTime: job.startTime,
+      title: job.title,
+      status: job.status,
+    },
   });
 };
 
@@ -205,6 +217,26 @@ describe('Resolver Tests', () => {
 
     it('Testing suite should be set up', () => {
       expect(true).to.equal(true);
+    });
+    it('addJob() should add a job to the database', async () => {
+      const dog = { ...dogMocks.mockDog };
+      const user = { ...userMocks.mockUser };
+      const job = { ...jobMocks.mockJob };
+      const userResult = await _addMockUser(testServer, user);
+      dog.ownerId = userResult.data.addUser.id;
+      const dogResult = await _addMockDog(testServer, dog);
+      job.userId = userResult.data.addUser.id;
+      job.dogId = dogResult.data.addDog.id;
+      const result = await _addMockJob(testServer, job);
+      console.log(result);
+      job.id = result.data.addJob.id;
+      job.user = { firstName: 'John' };
+      job.dog = { name: 'Frankie' };
+      delete job.userId;
+      delete job.dogId;
+      console.log(result.data.addJob);
+      console.log({ job });
+      expect(result.data.addJob).to.eql(job);
     });
   });
 });

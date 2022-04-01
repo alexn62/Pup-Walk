@@ -1,6 +1,6 @@
 export interface JobLocation {
   longitude: number;
   latitude: number;
-  primaryLabel: string;
+  primaryLabel?: string;
   secondaryLabel?: string;
 }

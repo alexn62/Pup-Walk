@@ -27,6 +27,7 @@ interface AddDogInput {
 interface AddJobInput {
   user: string;
   dog: string;
+  title: string;
   details: string;
   longitude: number;
   latitude: number;
@@ -75,9 +76,19 @@ const res = {
     },
     addJob: async (
       _: any,
-      { user, dog, details, longitude, latitude, duration, hourlyPay, startTime }: AddJobInput
+      { user, dog, details, longitude, title, latitude, duration, hourlyPay, startTime }: AddJobInput
     ) => {
-      const response = await jobQueries.addJob(user, dog, details, longitude, latitude, duration, hourlyPay, startTime);
+      const response = await jobQueries.addJob(
+        user,
+        dog,
+        title,
+        details,
+        longitude,
+        latitude,
+        duration,
+        hourlyPay,
+        startTime
+      );
       return response;
     },
   },

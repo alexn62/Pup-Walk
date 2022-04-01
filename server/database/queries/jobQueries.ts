@@ -4,6 +4,7 @@ import { getUser } from './userQueries';
 const addJob = async (
   user: string,
   dog: string,
+  title: string,
   details: string,
   longitude: number,
   latitude: number,
@@ -14,6 +15,7 @@ const addJob = async (
   const newJob = new Job({
     user: user,
     dog: dog,
+    title: title,
     details: details,
     longitude: longitude,
     latitude: latitude,

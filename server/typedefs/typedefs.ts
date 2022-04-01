@@ -21,6 +21,7 @@ const typedefinitions = gql`
     addJob(
       user: String!
       dog: String!
+      title: String!
       details: String!
       latitude: Int!
       longitude: Int!
@@ -60,6 +61,7 @@ const typedefinitions = gql`
     id: ID!
     user: User!
     dog: Dog!
+    title: String!
     details: String
     longitude: Int!
     latitude: Int!
