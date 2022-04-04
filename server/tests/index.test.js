@@ -63,6 +63,10 @@ const _addMockJob = async (server, job) => {
   });
 };
 
+const _getUser = async (server, userId) => {
+  return await server.executeOperation({ query: testQueries.getUserWithJobs, variables: { getUserId: userId } });
+};
+
 describe('Resolver Tests', () => {
   beforeAll(async () => {
     if (url.substring(url.length - 4) !== 'test') {
@@ -153,7 +157,6 @@ describe('Resolver Tests', () => {
       const user = { ...userMocks.mockUser };
       const userResult = await _addMockUser(testServer, user);
       dog.ownerId = userResult.data.addUser.id;
-
       const result = await _addMockDog(testServer, dog);
       expect(result.errors).to.equal(undefined);
       dog.id = result.data.addDog.id;
@@ -228,15 +231,30 @@ describe('Resolver Tests', () => {
       job.userId = userResult.data.addUser.id;
       job.dogId = dogResult.data.addDog.id;
       const result = await _addMockJob(testServer, job);
-      console.log(result);
       job.id = result.data.addJob.id;
-      job.user = { firstName: 'John' };
-      job.dog = { name: 'Frankie' };
-      delete job.userId;
-      delete job.dogId;
-      console.log(result.data.addJob);
-      console.log({ job });
-      expect(result.data.addJob).to.eql(job);
+      job.user = { ...userMocks.mockUser };
+      job.dog = { ...dogMocks.mockDog };
+      const received = result.data.addJob;
+      expect(received.details).to.eql(job.details);
+      expect(received.title).to.eql(job.title);
+      expect(received.location).to.eql(job.location);
+      expect(received.hourlyPay).to.eql(job.hourlyPay);
+      expect(received.status.toLowerCase()).to.eql(job.status);
+      expect(received.user.firstName).to.eql(job.user.firstName);
+      expect(received.dog.name).to.eql(job.dog.name);
+    });
+    it.only('addJob() should add a job to user', async () => {
+      const dog = { ...dogMocks.mockDog };
+      const user = { ...userMocks.mockUser };
+      const job = { ...jobMocks.mockJob };
+      const userResult = await _addMockUser(testServer, user);
+      dog.ownerId = userResult.data.addUser.id;
+      const dogResult = await _addMockDog(testServer, dog);
+      job.userId = userResult.data.addUser.id;
+      job.dogId = dogResult.data.addDog.id;
+      await _addMockJob(testServer, job);
+      const receivedUser = await _getUser(testServer, userResult.data.addUser.id);
+      expect(receivedUser.data.getUser.jobs[0].title).to.eql(job.title);
     });
   });
 });

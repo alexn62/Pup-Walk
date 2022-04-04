@@ -102,6 +102,15 @@ const res = {
       }
       return dogs;
     },
+    jobs: async (user: any) => {
+      const jobs = [];
+      for (let jobId of user.jobs) {
+        // console.log({ jobId });
+        const job = await res.Query.getJob(null, { id: jobId });
+        jobs.push(job);
+      }
+      return jobs;
+    },
   },
 
   Dog: {

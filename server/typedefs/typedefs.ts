@@ -19,8 +19,8 @@ const typedefinitions = gql`
       description: String!
     ): Dog
     addJob(
-      user: String!
-      dog: String!
+      user: ID!
+      dog: ID!
       title: String!
       details: String!
       latitude: Int!

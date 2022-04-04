@@ -25,7 +25,7 @@ const addJob = async (
   });
   const job = await newJob.save();
   const jobCreator = await getUser(user);
-  jobCreator.jobs.push(job._id);
+  jobCreator.jobs.push(job._id.toString());
   await jobCreator.save();
   return job;
 };

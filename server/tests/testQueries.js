@@ -40,6 +40,21 @@ const getUserWithDogs = gql`
     }
   }
 `;
+const getUserWithJobs = gql`
+  query GetUser($getUserId: String!) {
+    getUser(id: $getUserId) {
+      id
+      firstName
+      middleName
+      lastName
+      email
+      sex
+      jobs {
+        title
+      }
+    }
+  }
+`;
 
 const addDog = gql`
   mutation Mutation($owner: ID!, $name: String!, $sex: String!, $age: Int!, $breed: String!, $description: String!) {
@@ -85,8 +100,8 @@ const getDogWithOwner = gql`
 
 const addJob = gql`
   mutation Mutation(
-    $user: String!
-    $dog: String!
+    $user: ID!
+    $dog: ID!
     $title: String!
     $details: String!
     $latitude: Int!
@@ -130,4 +145,4 @@ const addJob = gql`
     }
   }
 `;
-module.exports = { addUser, getUser, addDog, getDog, getUserWithDogs, getDogWithOwner, addJob };
+module.exports = { addUser, getUser, addDog, getDog, getUserWithDogs, getDogWithOwner, addJob, getUserWithJobs };
