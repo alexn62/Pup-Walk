@@ -35,6 +35,10 @@ interface AddJobInput {
   hourlyPay: number;
   startTime: string;
 }
+interface DeleteJobInput {
+  userId: string;
+  jobId: string;
+}
 
 const res = {
   Query: {
@@ -90,6 +94,11 @@ const res = {
         startTime
       );
       return response;
+    },
+    deleteJob: async (_: any, { userId, jobId }: DeleteJobInput) => {
+      await userQueries.deleteJob(userId, jobId);
+      await jobQueries.deleteJob(jobId);
+      return jobId;
     },
   },
 

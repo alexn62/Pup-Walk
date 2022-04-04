@@ -34,4 +34,9 @@ const getJob = async (id: string): Promise<any> => {
   const job = await Job.findOne({ _id: id }).exec();
   return job;
 };
-export { addJob, getJob };
+
+const deleteJob = async (id: string) => {
+  await Job.deleteOne({ _id: id }).exec();
+};
+
+export { addJob, getJob, deleteJob };

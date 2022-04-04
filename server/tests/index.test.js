@@ -63,8 +63,15 @@ const _addMockJob = async (server, job) => {
   });
 };
 
+const _deleteJob = async (server, userId, jobId) => {
+  return await server.executeOperation({ query: testQueries.deleteJob, variables: { userId: userId, jobId: jobId } });
+};
+
 const _getUser = async (server, userId) => {
   return await server.executeOperation({ query: testQueries.getUserWithJobs, variables: { getUserId: userId } });
+};
+const _getJob = async (server, jobId) => {
+  return await server.executeOperation({ query: testQueries.getJob, variables: { getJobId: jobId } });
 };
 
 describe('Resolver Tests', () => {
@@ -243,7 +250,7 @@ describe('Resolver Tests', () => {
       expect(received.user.firstName).to.eql(job.user.firstName);
       expect(received.dog.name).to.eql(job.dog.name);
     });
-    it.only('addJob() should add a job to user', async () => {
+    it('addJob() should add a job to user', async () => {
       const dog = { ...dogMocks.mockDog };
       const user = { ...userMocks.mockUser };
       const job = { ...jobMocks.mockJob };
@@ -255,6 +262,40 @@ describe('Resolver Tests', () => {
       await _addMockJob(testServer, job);
       const receivedUser = await _getUser(testServer, userResult.data.addUser.id);
       expect(receivedUser.data.getUser.jobs[0].title).to.eql(job.title);
+    });
+    it('deleteJob() should delete the job from the user', async () => {
+      const dog = { ...dogMocks.mockDog };
+      const user = { ...userMocks.mockUser };
+      const job = { ...jobMocks.mockJob };
+      const userResult = await _addMockUser(testServer, user);
+      dog.ownerId = userResult.data.addUser.id;
+      const dogResult = await _addMockDog(testServer, dog);
+      job.userId = userResult.data.addUser.id;
+      job.dogId = dogResult.data.addDog.id;
+      const addedJob = await _addMockJob(testServer, job);
+      job.id = addedJob.data.addJob.id;
+      const receivedUser = await _getUser(testServer, userResult.data.addUser.id);
+      expect(receivedUser.data.getUser.jobs.map((job) => job.id)).to.include(job.id);
+      await _deleteJob(testServer, job.userId, job.id);
+      const newUser = await _getUser(testServer, userResult.data.addUser.id);
+      expect(newUser.data.getUser.jobs.map((job) => job.id)).to.not.include(job.id);
+    });
+    it('deleteJob() should delete the job from db', async () => {
+      const dog = { ...dogMocks.mockDog };
+      const user = { ...userMocks.mockUser };
+      const job = { ...jobMocks.mockJob };
+      const userResult = await _addMockUser(testServer, user);
+      dog.ownerId = userResult.data.addUser.id;
+      const dogResult = await _addMockDog(testServer, dog);
+      job.userId = userResult.data.addUser.id;
+      job.dogId = dogResult.data.addDog.id;
+      const addedJob = await _addMockJob(testServer, job);
+      job.id = addedJob.data.addJob.id;
+      const receivedJob = await _getJob(testServer, job.id);
+      expect(receivedJob.data.getJob.id).to.eql(job.id);
+      await _deleteJob(testServer, job.userId, job.id);
+      const newJob = await _getJob(testServer, job.id);
+      expect(newJob.errors[0].message).to.equal('Job not found.');
     });
   });
 });

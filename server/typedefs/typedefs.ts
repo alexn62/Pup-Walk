@@ -30,6 +30,7 @@ const typedefinitions = gql`
       startTime: String!
       status: String!
     ): Job
+    deleteJob(userId: ID!, jobId: ID!): ID
   }
 
   type User {

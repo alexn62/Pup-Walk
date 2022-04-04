@@ -50,6 +50,7 @@ const getUserWithJobs = gql`
       email
       sex
       jobs {
+        id
         title
       }
     }
@@ -145,4 +146,29 @@ const addJob = gql`
     }
   }
 `;
-module.exports = { addUser, getUser, addDog, getDog, getUserWithDogs, getDogWithOwner, addJob, getUserWithJobs };
+
+const getJob = gql`
+  query GetJob($getJobId: String!) {
+    getJob(id: $getJobId) {
+      id
+    }
+  }
+`;
+
+const deleteJob = gql`
+  mutation deleteJob($userId: ID!, $jobId: ID!) {
+    deleteJob(userId: $userId, jobId: $jobId)
+  }
+`;
+module.exports = {
+  addUser,
+  getUser,
+  addDog,
+  getDog,
+  getUserWithDogs,
+  getDogWithOwner,
+  addJob,
+  getUserWithJobs,
+  deleteJob,
+  getJob,
+};
