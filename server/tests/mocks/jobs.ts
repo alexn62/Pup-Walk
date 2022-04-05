@@ -12,6 +12,8 @@ const mockJob: Job = {
   startTime: '05 October 2021 14:48 UTC',
   status: 'open',
   timePosted: '',
+  candidates: [],
+  acceptedUser: '',
 };
 const mockJob2: Job = {
   id: '',
@@ -25,6 +27,8 @@ const mockJob2: Job = {
   startTime: '05 October 2021 14:48 UTC',
   status: 'open',
   timePosted: '',
+  candidates: [],
+  acceptedUser: '',
 };
 
 export { mockJob, mockJob2 };

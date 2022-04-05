@@ -10,4 +10,5 @@ export interface User {
   profilePhoto?: string;
   dogs?: string[];
   jobs?: Job[];
+  appliedTo?: Job[];
 }

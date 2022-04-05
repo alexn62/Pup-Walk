@@ -28,4 +28,12 @@ const deleteJob = async (userId: string, jobId: string) => {
   await user.save();
 };
 
-export { addUser, getUser, addDogToUser, deleteJob };
+const applyForJob = async (applicantId: string, jobId: string) => {
+  const user = await getUser(applicantId);
+  if (!user.appliedTo.includes(jobId)) {
+    user.appliedTo.push(jobId);
+    await user.save();
+  }
+};
+
+export { addUser, getUser, addDogToUser, deleteJob, applyForJob };

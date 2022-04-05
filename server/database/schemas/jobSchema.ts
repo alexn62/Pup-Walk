@@ -28,14 +28,6 @@ const jobSchema = new mongoose.Schema({
       required: true,
     },
   },
-  // longitude: {
-  //   type: Number,
-  //   required: true,
-  // },
-  // latitude: {
-  //   type: Number,
-  //   required: true,
-  // },
   duration: {
     type: Number,
     required: true,
@@ -56,6 +48,15 @@ const jobSchema = new mongoose.Schema({
     type: String,
     required: false,
     default: 'Open',
+  },
+  candidates: {
+    type: Array,
+    required: false,
+    default: [],
+  },
+  acceptedUser: {
+    type: String,
+    required: false,
   },
 });
 

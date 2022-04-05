@@ -12,4 +12,6 @@ export interface Job {
   timePosted: string;
   startTime: string;
   status: string;
+  acceptedUser: string;
+  candidates: string[];
 }

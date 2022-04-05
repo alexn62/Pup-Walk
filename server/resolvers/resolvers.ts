@@ -45,6 +45,11 @@ interface GetJobsCloseByInput {
   maxDistance: number;
 }
 
+interface ApplyForJobInput {
+  applicantId: string;
+  jobId: string;
+}
+
 const res = {
   Query: {
     getUser: async (_: any, { id }: { id: string }): Promise<User> => {
@@ -109,6 +114,11 @@ const res = {
       await jobQueries.deleteJob(jobId);
       return jobId;
     },
+    applyForJob: async (_: any, { applicantId, jobId }: ApplyForJobInput) => {
+      await userQueries.applyForJob(applicantId, jobId);
+      const response = await jobQueries.addApplicant(applicantId, jobId);
+      return response;
+    },
   },
 
   User: {
@@ -123,6 +133,14 @@ const res = {
     jobs: async (user: any) => {
       const jobs = [];
       for (let jobId of user.jobs) {
+        const job = await res.Query.getJob(null, { id: jobId });
+        jobs.push(job);
+      }
+      return jobs;
+    },
+    appliedTo: async (user: any) => {
+      const jobs = [];
+      for (let jobId of user.appliedTo) {
         const job = await res.Query.getJob(null, { id: jobId });
         jobs.push(job);
       }
@@ -154,6 +172,14 @@ const res = {
     },
     startTime: (job: any) => {
       return job.startTime.toString();
+    },
+    candidates: async (job: any) => {
+      const users = [];
+      for (let userId of job.candidates) {
+        const user = await res.Query.getUser(null, { id: userId });
+        users.push(user);
+      }
+      return users;
     },
   },
 };

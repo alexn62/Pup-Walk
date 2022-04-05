@@ -32,6 +32,7 @@ const typedefinitions = gql`
       status: String!
     ): Job
     deleteJob(userId: ID!, jobId: ID!): ID
+    applyForJob(applicantId: ID!, jobId: ID!): Job
   }
 
   type User {
@@ -45,6 +46,7 @@ const typedefinitions = gql`
     sex: String
     dogs: [Dog]
     jobs: [Job]
+    appliedTo: [Job]
   }
 
   type Dog {
@@ -71,6 +73,7 @@ const typedefinitions = gql`
     timePosted: String!
     startTime: String!
     status: String!
+    candidates: [User]
   }
 
   type JobLocation {
