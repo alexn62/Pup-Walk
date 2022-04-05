@@ -22,6 +22,12 @@ const getUser = gql`
       lastName
       email
       sex
+      jobs {
+        id
+      }
+      appliedTo {
+        id
+      }
     }
   }
 `;
@@ -52,6 +58,9 @@ const getUserWithJobs = gql`
       jobs {
         id
         title
+      }
+      appliedTo {
+        id
       }
     }
   }
@@ -147,6 +156,9 @@ const getJob = gql`
   query GetJob($getJobId: String!) {
     getJob(id: $getJobId) {
       id
+      candidates {
+        id
+      }
     }
   }
 `;
@@ -168,6 +180,15 @@ const deleteJob = gql`
     deleteJob(userId: $userId, jobId: $jobId)
   }
 `;
+const applyForJob = gql`
+  mutation ApplyForJob($applicantId: ID!, $jobId: ID!) {
+    applyForJob(applicantId: $applicantId, jobId: $jobId) {
+      candidates {
+        id
+      }
+    }
+  }
+`;
 module.exports = {
   addUser,
   getUser,
@@ -180,4 +201,5 @@ module.exports = {
   deleteJob,
   getJob,
   getJobsCloseBy,
+  applyForJob,
 };

@@ -84,6 +84,13 @@ const _getJob = async (server, jobId) => {
   return await server.executeOperation({ query: testQueries.getJob, variables: { getJobId: jobId } });
 };
 
+const _applyForJob = async (server, applicantId, jobId) => {
+  return await server.executeOperation({
+    query: testQueries.applyForJob,
+    variables: { applicantId: applicantId, jobId: jobId },
+  });
+};
+
 describe('Resolver Tests', () => {
   beforeAll(async () => {
     if (url.substring(url.length - 4) !== 'test') {
@@ -109,7 +116,7 @@ describe('Resolver Tests', () => {
       const result = await _addMockUser(testServer, user);
       expect(result.errors).to.equal(undefined);
       user.id = result.data.addUser.id;
-      expect(result.data.addUser).to.eql(user);
+      expect(result.data.addUser.firstName).to.eql(user.firstName);
     });
 
     it('getUser() Should get User from DB without errors', async () => {
@@ -123,7 +130,7 @@ describe('Resolver Tests', () => {
           getUserId: result.data.addUser.id,
         },
       });
-      expect(res.data.getUser).to.eql(user);
+      expect(res.data.getUser.firstName).to.eql(user.firstName);
     });
 
     it('getUser() return an error if no user found with id', async () => {
@@ -155,7 +162,7 @@ describe('Resolver Tests', () => {
         },
       });
       user.dogs = [{ name: 'Frankie' }];
-      expect(res.data.getUser).to.eql(user);
+      expect(res.data.getUser.dogs[0].name).to.eql(user.dogs[0].name);
     });
   });
 
@@ -325,6 +332,27 @@ describe('Resolver Tests', () => {
       expect(result.data.getJobsCloseBy.length).to.greaterThan(1);
       const result2 = await _getJobsCloseBy(testServer, [job.location.longitude, job.location.latitude], 10);
       expect(result2.data.getJobsCloseBy.length).to.equal(1);
+    });
+    it("applyForJob() should add user to job's applicants and job to user's appliedTo", async () => {
+      const dog = { ...dogMocks.mockDog };
+      const user = { ...userMocks.mockUser };
+      const user2 = { ...userMocks.mockUser2 };
+      const job = { ...jobMocks.mockJob };
+      const userResult = await _addMockUser(testServer, user);
+      const userResult2 = await _addMockUser(testServer, user2);
+      dog.ownerId = userResult.data.addUser.id;
+      const dogResult = await _addMockDog(testServer, dog);
+      job.userId = userResult.data.addUser.id;
+      job.dogId = dogResult.data.addDog.id;
+      const jobResult = await _addMockJob(testServer, job);
+      await _applyForJob(testServer, userResult2.data.addUser.id, jobResult.data.addJob.id);
+      const result = await _getJob(testServer, jobResult.data.addJob.id);
+      expect(result.data.getJob.candidates.map((can) => can.id).includes(userResult2.data.addUser.id)).to.be.true;
+      expect(result.data.getJob.candidates.map((can) => can.id).includes('fake')).to.be.false;
+      const userRes = await _getUser(testServer, userResult2.data.addUser.id);
+      console.log(userRes);
+      expect(userRes.data.getUser.appliedTo.map((job) => job.id).includes(jobResult.data.addJob.id)).to.be.true;
+      expect(userRes.data.getUser.appliedTo.map((job) => job.id).includes('fake')).to.be.false;
     });
   });
 });

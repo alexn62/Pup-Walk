@@ -7,6 +7,7 @@ const mockUser: User = {
   middleName: 'Jeff',
   lastName: 'Doe',
   sex: 'Male',
+  jobs: [],
 };
 
 const mockUser2: User = {
@@ -16,6 +17,7 @@ const mockUser2: User = {
   middleName: 'Maria',
   lastName: 'Doa',
   sex: 'Female',
+  jobs: [],
 };
 
 export { mockUser, mockUser2 };
