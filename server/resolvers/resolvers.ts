@@ -40,6 +40,11 @@ interface DeleteJobInput {
   jobId: string;
 }
 
+interface GetJobsCloseByInput {
+  startingPoint: number[];
+  maxDistance: number;
+}
+
 const res = {
   Query: {
     getUser: async (_: any, { id }: { id: string }): Promise<User> => {
@@ -62,6 +67,10 @@ const res = {
         throw new Error('Job not found.');
       }
       return job;
+    },
+    getJobsCloseBy: async (_: any, { startingPoint, maxDistance }: GetJobsCloseByInput): Promise<Job[]> => {
+      const jobs = await jobQueries.getJobsCloseBy(startingPoint, maxDistance);
+      return jobs;
     },
   },
 
@@ -114,7 +123,6 @@ const res = {
     jobs: async (user: any) => {
       const jobs = [];
       for (let jobId of user.jobs) {
-        // console.log({ jobId });
         const job = await res.Query.getJob(null, { id: jobId });
         jobs.push(job);
       }
@@ -131,8 +139,8 @@ const res = {
   Job: {
     location: (job: any) => {
       return {
-        latitude: job.location.coordinates[0],
-        longitude: job.location.coordinates[1],
+        latitude: job.location.coordinates[1],
+        longitude: job.location.coordinates[0],
       };
     },
     user: async (job: any) => {

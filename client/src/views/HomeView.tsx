@@ -7,7 +7,6 @@ const HomeView = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const views = [<NewJobs />, <MyJobs />, <Messages />];
   const changeIndex = (newIndex: number) => {
-    console.log(newIndex);
     setCurrentIndex(newIndex);
   };
   return (

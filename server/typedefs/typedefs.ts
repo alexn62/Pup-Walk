@@ -5,6 +5,7 @@ const typedefinitions = gql`
     getUser(id: String!): User
     getDog(id: String!): Dog
     getJob(id: String!): Job
+    getJobsCloseBy(startingPoint: [Float!], maxDistance: Float!): [Job]
   }
   type Mutation {
     addUser(email: String!, firstName: String!, lastName: String!, middleName: String, sex: String): User
@@ -23,8 +24,8 @@ const typedefinitions = gql`
       dog: ID!
       title: String!
       details: String!
-      latitude: Int!
-      longitude: Int!
+      latitude: Float!
+      longitude: Float!
       duration: Int!
       hourlyPay: Int!
       startTime: String!
@@ -73,8 +74,8 @@ const typedefinitions = gql`
   }
 
   type JobLocation {
-    longitude: Int!
-    latitude: Int!
+    longitude: Float!
+    latitude: Float!
   }
 `;
 

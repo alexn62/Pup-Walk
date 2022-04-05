@@ -24,10 +24,7 @@ const addDogToUser = async (userId: string, dogId: string) => {
 
 const deleteJob = async (userId: string, jobId: string) => {
   const user = await getUser(userId);
-  console.log({ jobId });
-  console.log('Before', user.jobs);
   user.jobs = user.jobs.filter((job: any) => job !== jobId);
-  console.log('After', user.jobs);
   await user.save();
 };
 

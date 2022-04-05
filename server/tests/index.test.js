@@ -63,6 +63,16 @@ const _addMockJob = async (server, job) => {
   });
 };
 
+const _getJobsCloseBy = async (server, startingPoint, maxDistance) => {
+  return await server.executeOperation({
+    query: testQueries.getJobsCloseBy,
+    variables: {
+      startingPoint: startingPoint,
+      maxDistance: maxDistance,
+    },
+  });
+};
+
 const _deleteJob = async (server, userId, jobId) => {
   return await server.executeOperation({ query: testQueries.deleteJob, variables: { userId: userId, jobId: jobId } });
 };
@@ -238,7 +248,6 @@ describe('Resolver Tests', () => {
       job.userId = userResult.data.addUser.id;
       job.dogId = dogResult.data.addDog.id;
       const result = await _addMockJob(testServer, job);
-      console.log(result);
       job.id = result.data.addJob.id;
       job.user = { ...userMocks.mockUser };
       job.dog = { ...dogMocks.mockDog };
@@ -297,6 +306,25 @@ describe('Resolver Tests', () => {
       await _deleteJob(testServer, job.userId, job.id);
       const newJob = await _getJob(testServer, job.id);
       expect(newJob.errors[0].message).to.equal('Job not found.');
+    });
+    it('getJobsCloseBy() should return the jobs in a given radius', async () => {
+      const dog = { ...dogMocks.mockDog };
+      const user = { ...userMocks.mockUser };
+      const job = { ...jobMocks.mockJob };
+      const job2 = { ...jobMocks.mockJob2 };
+      const userResult = await _addMockUser(testServer, user);
+      dog.ownerId = userResult.data.addUser.id;
+      const dogResult = await _addMockDog(testServer, dog);
+      job.userId = userResult.data.addUser.id;
+      job.dogId = dogResult.data.addDog.id;
+      job2.userId = userResult.data.addUser.id;
+      job2.dogId = dogResult.data.addDog.id;
+      await _addMockJob(testServer, job);
+      await _addMockJob(testServer, job2);
+      const result = await _getJobsCloseBy(testServer, [job.location.longitude, job.location.latitude], 10000000);
+      expect(result.data.getJobsCloseBy.length).to.greaterThan(1);
+      const result2 = await _getJobsCloseBy(testServer, [job.location.longitude, job.location.latitude], 10);
+      expect(result2.data.getJobsCloseBy.length).to.equal(1);
     });
   });
 });

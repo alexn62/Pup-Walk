@@ -105,8 +105,8 @@ const addJob = gql`
     $dog: ID!
     $title: String!
     $details: String!
-    $latitude: Int!
-    $longitude: Int!
+    $latitude: Float!
+    $longitude: Float!
     $duration: Int!
     $hourlyPay: Int!
     $startTime: String!
@@ -151,6 +151,18 @@ const getJob = gql`
   }
 `;
 
+const getJobsCloseBy = gql`
+  query getJobsCloseBy($maxDistance: Float!, $startingPoint: [Float!]) {
+    getJobsCloseBy(maxDistance: $maxDistance, startingPoint: $startingPoint) {
+      title
+      location {
+        latitude
+        longitude
+      }
+    }
+  }
+`;
+
 const deleteJob = gql`
   mutation deleteJob($userId: ID!, $jobId: ID!) {
     deleteJob(userId: $userId, jobId: $jobId)
@@ -167,4 +179,5 @@ module.exports = {
   getUserWithJobs,
   deleteJob,
   getJob,
+  getJobsCloseBy,
 };

@@ -35,9 +35,43 @@ const getJob = async (id: string): Promise<any> => {
   const job = await Job.findOne({ _id: id }).exec();
   return job;
 };
+// model.find({
+//   "location.coordinates": {
+//     "$near": {
+//       "$maxDistance": 1000,
+//       "$geometry": {
+//         "type": "Point",
+//         "coordinates": [
+//           10,
+//           10
+//         ]
+//       }
+//     }
+//   }
+const getJobsCloseBy = async (startingPoint: number[], maxDistance: number) => {
+  const jobs = await Job.find({
+    location: {
+      $near: {
+        $maxDistance: maxDistance,
+        $geometry: {
+          type: 'Point',
+          coordinates: startingPoint,
+        },
+      },
+    },
+  });
+  // .where('location')
+  // .near({
+  //   $geometry: { type: 'Point', coordinates: startingPoint },
+  //   $minDistance: 0,
+  //   $center: [startingPoint[1], startingPoint[0]],
+  //   $maxDistance: maxDistance,
+  // });
+  return jobs;
+};
 
 const deleteJob = async (id: string) => {
   await Job.deleteOne({ _id: id }).exec();
 };
 
-export { addJob, getJob, deleteJob };
+export { addJob, getJob, deleteJob, getJobsCloseBy };
