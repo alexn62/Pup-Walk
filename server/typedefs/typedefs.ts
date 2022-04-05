@@ -64,9 +64,7 @@ const typedefinitions = gql`
     dog: Dog!
     title: String!
     details: String
-    longitude: Int!
-    latitude: Int!
-    location: JobLocation
+    location: JobLocation!
     duration: Int!
     hourlyPay: Int!
     timePosted: String!

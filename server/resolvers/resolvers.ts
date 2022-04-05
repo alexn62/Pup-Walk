@@ -131,8 +131,8 @@ const res = {
   Job: {
     location: (job: any) => {
       return {
-        latitude: job.latitude,
-        longitude: job.longitude,
+        latitude: job.location.coordinates[0],
+        longitude: job.location.coordinates[1],
       };
     },
     user: async (job: any) => {

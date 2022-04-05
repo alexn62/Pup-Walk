@@ -100,7 +100,7 @@ const getDogWithOwner = gql`
 `;
 
 const addJob = gql`
-  mutation Mutation(
+  mutation addJob(
     $user: ID!
     $dog: ID!
     $title: String!
@@ -126,16 +126,12 @@ const addJob = gql`
     ) {
       id
       details
-      latitude
-      longitude
-      location {
-        longitude
-        latitude
-      }
-      duration
-      hourlyPay
       title
-      startTime
+      location {
+        latitude
+        longitude
+      }
+      hourlyPay
       status
       user {
         firstName

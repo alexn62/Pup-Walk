@@ -238,6 +238,7 @@ describe('Resolver Tests', () => {
       job.userId = userResult.data.addUser.id;
       job.dogId = dogResult.data.addDog.id;
       const result = await _addMockJob(testServer, job);
+      console.log(result);
       job.id = result.data.addJob.id;
       job.user = { ...userMocks.mockUser };
       job.dog = { ...dogMocks.mockDog };
