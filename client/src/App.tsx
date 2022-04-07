@@ -1,11 +1,14 @@
 import './App.css';
+import { ApolloProvider } from '@apollo/client';
 import HomeView from './views/HomeView';
-
+import { client } from './services/api.service';
 function App() {
   return (
-    <div className="App">
-      <HomeView/>
-    </div>
+    <ApolloProvider client={client}>
+      <div className="App">
+        <HomeView />
+      </div>
+    </ApolloProvider>
   );
 }
 
