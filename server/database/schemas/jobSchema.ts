@@ -55,6 +55,14 @@ const jobSchema = new mongoose.Schema<IJob>(
       required: true,
       default: [],
     },
+    city: {
+      type: String,
+      required: false,
+    },
+    locality: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: { createdAt: 'timePosted' } }
 );

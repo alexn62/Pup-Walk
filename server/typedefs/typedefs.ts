@@ -73,6 +73,8 @@ const typedefinitions = gql`
     startTime: String!
     status: String!
     candidates: [User]
+    city: String
+    locality: String
   }
 
   type JobLocation {

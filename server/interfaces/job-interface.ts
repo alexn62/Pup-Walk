@@ -1,3 +1,4 @@
+import { StringValueNode } from 'graphql';
 import { Types } from 'mongoose';
 
 export interface IJob {
@@ -14,4 +15,6 @@ export interface IJob {
   status: string;
   acceptedUser: Types.ObjectId;
   candidates: Types.ObjectId[];
+  city?: string;
+  locality?: string;
 }

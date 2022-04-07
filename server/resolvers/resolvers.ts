@@ -2,6 +2,8 @@ import * as dogQueries from '../database/queries/dogQueries';
 import * as userQueries from '../database/queries/userQueries';
 import * as jobQueries from '../database/queries/jobQueries';
 
+import axios from 'axios';
+
 import { Types, HydratedDocument } from 'mongoose';
 
 import { IDog } from '../interfaces/dog-interface';
@@ -200,6 +202,24 @@ const res = {
         users.push(user);
       }
       return users;
+    },
+    city: async (job: IJob): Promise<string> => {
+      const response = await axios.get(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${job.jobLocation.coordinates[1]}&longitude=${job.jobLocation.coordinates[0]}&localityLanguage=en`
+      );
+      const city = response.data.city;
+      const region = response.data.principalSubdivision;
+
+      return city === '' ? (region === '' ? response.data.countryName : region) : city;
+    },
+    locality: async (job: IJob): Promise<string> => {
+      const response = await axios.get(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${job.jobLocation.coordinates[1]}&longitude=${job.jobLocation.coordinates[0]}&localityLanguage=en`
+      );
+      const locality = response.data.locality;
+      const country = response.data.countryName;
+
+      return locality === '' ? country : locality;
     },
   },
 };
