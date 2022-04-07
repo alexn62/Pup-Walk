@@ -1,5 +1,4 @@
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
-import { Job } from '../interfaces/interfaces';
 export const client = new ApolloClient({
   uri: 'http://localhost:4000',
   cache: new InMemoryCache(),
@@ -12,6 +11,9 @@ export const getJob = gql`
       details
       hourlyPay
       duration
+      city
+      locality
+      startTime
       user {
         id
         firstName
@@ -20,6 +22,7 @@ export const getJob = gql`
       }
       dog {
         name
+        breed
         age
       }
     }

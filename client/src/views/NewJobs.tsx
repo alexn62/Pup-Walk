@@ -6,17 +6,19 @@ import NewPostItem from '../components/NewPostItem';
 
 const NewJobs = () => {
   // const [posts, setPosts] = useState([]);
-  const { error, loading, data } = useQuery(getJob, { variables: { getJobId: '624efc93989d6d26dfd1e563' } });
+  const { error, loading, data } = useQuery(getJob, { variables: { getJobId: '624f09a217720abf637965b7' } });
   // const postElements = <NewPostItem {...data.getPost}></NewPostItem>;
   if (loading) return null;
   return (
     <div className="flex justify-center pt-16">
       <div className="flex flex-col w-1/3 min-w-[450px] space-y-3">
-        <button
+        {/* <button
           onClick={() => {
-            console.log(data);
+            console.log(error);
           }}
-        ></button>
+        >
+          loco
+        </button> */}
         <NewPostItem {...data.getJob}></NewPostItem>
       </div>
     </div>

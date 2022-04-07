@@ -6,24 +6,15 @@ import { IoLogoUsd } from 'react-icons/io';
 import { Job } from '../interfaces/interfaces';
 import MainButton from './MainButton';
 
-// interface NewPostItemProps {
-//   ownerName: string;
-//   ownerRating: number;
-//   ownerProfilePhoto: string;
-//   dogName: string;
-//   dogDescription: string;
-//   dogPhoto: string;
-//   details: string;
-//   mainLocation: string;
-//   secondaryLocation: string;
-//   date: string;
-//   duration: string;
-//   pickupTime: string;
-//   hourlyPay: number;
-//   totalPay: number;
-// }
-
 const NewPostItem: FC<Job> = (job: Job) => {
+  const startDate = new Date(+job.startTime);
+  const startTime = startDate.toLocaleDateString('en-US', {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit',
+  });
   const user = job.user;
   const dog = job.dog;
   let stars = [];
@@ -54,7 +45,7 @@ const NewPostItem: FC<Job> = (job: Job) => {
         <div className="flex">
           <div className="flex flex-col items-end justify-between">
             <p className="font-semibold text-lg">{dog.name}</p>
-            <p className="text-sm">{dog.age}y/o</p>
+            <p className="text-sm">{`${dog.age} y/o, ${dog.breed}`}</p>
           </div>
           <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full ml-2 overflow-hidden">
             <img src={dog.dogPhoto} alt="" className="object-cover h-full"></img>
@@ -66,15 +57,13 @@ const NewPostItem: FC<Job> = (job: Job) => {
       <p className="text-left">{job.details}</p>
       <div className="flex items-stretch w-full space-x-2">
         <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kBlueLight">
-          <p className="text-lg text-kBlue">{'props.mainLocation'}</p>
-          <p className="text-kMidBlue">{'props.secondaryLocation'}</p>
+          <p className="text-lg text-kBlue">{job.city ?? ''}</p>
+          <p className="text-kMidBlue">{job.locality ?? ''}</p>
           <HiLocationMarker color="#4971FF" />
         </div>
         <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kBlueLight flex-grow">
-          <p className="text-lg text-kBlue">
-            {'props.date'}, {job.duration / 60}hrs
-          </p>
-          <p className="text-kMidBlue">{job.startTime}</p>
+          <p className="text-lg text-kBlue">{`${job.duration} Minutes`}</p>
+          <p className="text-kMidBlue">{startTime}</p>
           <HiOutlineClock color="#4971FF" />
         </div>
         <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kGreenLight">

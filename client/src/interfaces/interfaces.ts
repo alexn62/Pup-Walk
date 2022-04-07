@@ -37,4 +37,6 @@ export interface Job {
   status: string;
   acceptedUser: User;
   candidates: User[];
+  city?: string;
+  locality?: string;
 }
