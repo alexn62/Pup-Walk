@@ -1,9 +1,11 @@
 import { Job } from '../schemas/jobSchema';
 import { getUser } from './userQueries';
+import { Types, HydratedDocument } from 'mongoose';
+import { IJob } from '../../interfaces/job-interface';
 
 const addJob = async (
-  user: string,
-  dog: string,
+  user: Types.ObjectId,
+  dog: Types.ObjectId,
   title: string,
   details: string,
   longitude: number,
@@ -11,34 +13,36 @@ const addJob = async (
   duration: number,
   hourlyPay: number,
   startTime: string
-) => {
+): Promise<HydratedDocument<IJob | null>> => {
   const newJob = new Job({
     user: user,
     dog: dog,
     title: title,
     details: details,
-    location: { type: 'Point', coordinates: [longitude, latitude] },
-    // longitude: longitude,
-    // latitude: latitude,
+    jobLocation: { type: 'Point', coordinates: [longitude, latitude] },
     duration: duration,
     hourlyPay: hourlyPay,
     startTime: Date.parse(startTime),
   });
   const job = await newJob.save();
   const jobCreator = await getUser(user);
-  jobCreator.jobs.push(job._id.toString());
-  await jobCreator.save();
+  jobCreator?.jobs?.push(job._id);
+  await jobCreator?.save();
   return job;
 };
 
-const getJob = async (id: string): Promise<any> => {
-  const job = await Job.findOne({ _id: id }).exec();
+const getJob = async (id: Types.ObjectId): Promise<HydratedDocument<IJob> | null> => {
+  const job = await Job.findOne({ _id: id });
   return job;
 };
 
-const getJobsCloseBy = async (startingPoint: number[], maxDistance: number) => {
+const getJobsCloseBy = async (
+  startingPoint: number[],
+  maxDistance: number
+): Promise<HydratedDocument<IJob>[] | null> => {
+  console.log({ startingPoint });
   const jobs = await Job.find({
-    location: {
+    jobLocation: {
       $near: {
         $maxDistance: maxDistance,
         $geometry: {
@@ -48,19 +52,24 @@ const getJobsCloseBy = async (startingPoint: number[], maxDistance: number) => {
       },
     },
   });
+
   return jobs;
 };
 
-const deleteJob = async (id: string) => {
-  await Job.deleteOne({ _id: id }).exec();
+const deleteJob = async (id: Types.ObjectId) => {
+  return await Job.deleteOne({ _id: id });
 };
 
-const addApplicant = async (applicantId: string, jobId: string) => {
+const addApplicant = async (
+  applicantId: Types.ObjectId,
+  jobId: Types.ObjectId
+): Promise<HydratedDocument<IJob> | null | undefined> => {
   const job = await getJob(jobId);
-  if (!job.candidates.includes(applicantId)) {
-    job.candidates.push(applicantId);
-    return await job.save();
+  if (!job?.candidates.includes(applicantId)) {
+    job?.candidates.push(applicantId);
+    return await job?.save();
   }
+  return null;
 };
 
 export { addJob, getJob, deleteJob, getJobsCloseBy, addApplicant };

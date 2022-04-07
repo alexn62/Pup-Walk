@@ -1,10 +1,12 @@
-export interface Dog {
-  id: string;
+import { Types } from 'mongoose';
+
+export interface IDog {
+  id: Types.ObjectId;
   name: string;
   breed: string;
   sex: string;
   age: number;
   dogPhoto?: string;
-  ownerId: string;
+  owner: Types.ObjectId;
   description: string;
 }

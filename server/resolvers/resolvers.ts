@@ -2,9 +2,11 @@ import * as dogQueries from '../database/queries/dogQueries';
 import * as userQueries from '../database/queries/userQueries';
 import * as jobQueries from '../database/queries/jobQueries';
 
-import { Dog } from '../interfaces/dog-interface';
-import { User } from '../interfaces/user-interface';
-import { Job } from '../interfaces/job-interface';
+import { Types, HydratedDocument } from 'mongoose';
+
+import { IDog } from '../interfaces/dog-interface';
+import { IUser } from '../interfaces/user-interface';
+import { IJob } from '../interfaces/job-interface';
 
 interface AddUserInput {
   email: string;
@@ -52,29 +54,32 @@ interface ApplyForJobInput {
 
 const res = {
   Query: {
-    getUser: async (_: any, { id }: { id: string }): Promise<User> => {
-      const user = await userQueries.getUser(id);
+    getUser: async (_: any, { id }: { id: string }): Promise<IUser> => {
+      const user = await userQueries.getUser(new Types.ObjectId(id));
       if (!user) {
         throw new Error('User not found.');
       }
       return user;
     },
-    getDog: async (_: any, { id }: { id: String }): Promise<Dog> => {
-      const dog = await dogQueries.getDog(id);
+    getDog: async (_: any, { id }: { id: string }): Promise<IDog> => {
+      const dog = await dogQueries.getDog(new Types.ObjectId(id));
       if (!dog) {
         throw new Error('Dog not found.');
       }
       return dog;
     },
-    getJob: async (_: any, { id }: { id: string }): Promise<Job> => {
-      const job = await jobQueries.getJob(id);
+    getJob: async (_: any, { id }: { id: string }): Promise<IJob> => {
+      const job = await jobQueries.getJob(new Types.ObjectId(id));
       if (!job) {
         throw new Error('Job not found.');
       }
       return job;
     },
-    getJobsCloseBy: async (_: any, { startingPoint, maxDistance }: GetJobsCloseByInput): Promise<Job[]> => {
+    getJobsCloseBy: async (_: any, { startingPoint, maxDistance }: GetJobsCloseByInput): Promise<IJob[]> => {
       const jobs = await jobQueries.getJobsCloseBy(startingPoint, maxDistance);
+      if (!jobs) {
+        throw new Error('No jobs nearby.');
+      }
       return jobs;
     },
   },
@@ -88,7 +93,15 @@ const res = {
 
     addDog: async (_: any, { owner, name, age, sex, dateAdded, breed, description }: AddDogInput) => {
       // validate add dog input
-      const response = await dogQueries.addDog(owner, name, age, sex, breed, description, dateAdded);
+      const response = await dogQueries.addDog(
+        new Types.ObjectId(owner),
+        name,
+        age,
+        sex,
+        breed,
+        description,
+        dateAdded
+      );
 
       return response;
     },
@@ -97,8 +110,8 @@ const res = {
       { user, dog, details, longitude, title, latitude, duration, hourlyPay, startTime }: AddJobInput
     ) => {
       const response = await jobQueries.addJob(
-        user,
-        dog,
+        new Types.ObjectId(user),
+        new Types.ObjectId(dog),
         title,
         details,
         longitude,
@@ -110,73 +123,80 @@ const res = {
       return response;
     },
     deleteJob: async (_: any, { userId, jobId }: DeleteJobInput) => {
-      await userQueries.deleteJob(userId, jobId);
-      await jobQueries.deleteJob(jobId);
+      await userQueries.deleteJob(new Types.ObjectId(userId), new Types.ObjectId(jobId));
+      await jobQueries.deleteJob(new Types.ObjectId(jobId));
       return jobId;
     },
     applyForJob: async (_: any, { applicantId, jobId }: ApplyForJobInput) => {
-      await userQueries.applyForJob(applicantId, jobId);
-      const response = await jobQueries.addApplicant(applicantId, jobId);
+      await userQueries.applyForJob(new Types.ObjectId(applicantId), new Types.ObjectId(jobId));
+      const response = await jobQueries.addApplicant(new Types.ObjectId(applicantId), new Types.ObjectId(jobId));
       return response;
     },
   },
 
   User: {
-    dogs: async (user: any) => {
+    dogs: async (user: IUser): Promise<IDog[]> => {
       const dogs = [];
-      for (let dogId of user.dogs) {
-        const dog = await res.Query.getDog(null, { id: dogId });
-        dogs.push(dog);
+      if (user && user.dogs) {
+        for (let dogId of user.dogs) {
+          const dog = await res.Query.getDog(null, { id: dogId.toString() });
+          dogs.push(dog);
+        }
       }
       return dogs;
     },
-    jobs: async (user: any) => {
+
+    jobs: async (user: IUser): Promise<IJob[]> => {
       const jobs = [];
-      for (let jobId of user.jobs) {
-        const job = await res.Query.getJob(null, { id: jobId });
-        jobs.push(job);
+      if (user && user.jobs) {
+        for (let jobId of user.jobs) {
+          const job = await res.Query.getJob(null, { id: jobId.toString() });
+          jobs.push(job);
+        }
       }
       return jobs;
     },
-    appliedTo: async (user: any) => {
+    appliedTo: async (user: IUser): Promise<IJob[]> => {
       const jobs = [];
-      for (let jobId of user.appliedTo) {
-        const job = await res.Query.getJob(null, { id: jobId });
-        jobs.push(job);
+      if (user && user.appliedTo) {
+        for (let jobId of user.appliedTo) {
+          const job = await res.Query.getJob(null, { id: jobId.toString() });
+          jobs.push(job);
+        }
       }
       return jobs;
     },
   },
 
   Dog: {
-    owner: async (dog: any) => {
-      return await res.Query.getUser(null, { id: dog.owner });
+    owner: async (dog: IDog): Promise<IUser> => {
+      return await res.Query.getUser(null, { id: dog.owner.toString() });
     },
   },
 
   Job: {
-    location: (job: any) => {
+    jobLocation: (job: IJob): { type: { type: string }; coordinates: number[] } => {
       return {
-        latitude: job.location.coordinates[1],
-        longitude: job.location.coordinates[0],
+        type: { type: 'JobLocation' },
+        coordinates: [job.jobLocation.coordinates[1], job.jobLocation.coordinates[0]],
       };
     },
-    user: async (job: any) => {
-      return await res.Query.getUser(null, { id: job.user });
+    user: async (job: IJob): Promise<IUser> => {
+      return await res.Query.getUser(null, { id: job.user.toString() });
     },
-    dog: async (job: any) => {
-      return await res.Query.getDog(null, { id: job.dog });
+    dog: async (job: IJob): Promise<IDog> => {
+      return await res.Query.getDog(null, { id: job.dog.toString() });
     },
-    timePosted: (job: any) => {
-      return job.timePosted.toString();
+    timePosted: (job: IJob): Date => {
+      return job.timePosted;
     },
-    startTime: (job: any) => {
-      return job.startTime.toString();
+    startTime: (job: IJob): Date => {
+      return job.startTime;
     },
-    candidates: async (job: any) => {
+    candidates: async (job: IJob): Promise<IUser[]> => {
       const users = [];
       for (let userId of job.candidates) {
-        const user = await res.Query.getUser(null, { id: userId });
+        const user = await res.Query.getUser(null, { id: userId.toString() });
         users.push(user);
       }
       return users;

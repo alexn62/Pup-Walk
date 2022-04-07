@@ -1,7 +1,7 @@
-import { User } from '../../interfaces/user-interface';
-
-const mockUser: User = {
-  id: '',
+import { IUser } from '../../interfaces/user-interface';
+import { Types } from 'mongoose';
+const mockUser: IUser = {
+  id: new Types.ObjectId(),
   email: 'test@gmail.com',
   firstName: 'John',
   middleName: 'Jeff',
@@ -10,8 +10,8 @@ const mockUser: User = {
   jobs: [],
 };
 
-const mockUser2: User = {
-  id: '',
+const mockUser2: IUser = {
+  id: new Types.ObjectId(),
   email: 'secondTest@gmail.com',
   firstName: 'Alisha',
   middleName: 'Maria',

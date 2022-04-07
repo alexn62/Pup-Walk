@@ -1,14 +1,14 @@
-import { Job } from './job-interface';
-
-export interface User {
-  id: string;
+import { Types } from 'mongoose';
+export interface IUser {
+  id: Types.ObjectId;
   email: string;
   firstName: string;
   middleName?: string;
   lastName: string;
   sex?: string;
   profilePhoto?: string;
-  dogs?: string[];
-  jobs?: Job[];
-  appliedTo?: Job[];
+  accountCreated?: Date;
+  dogs?: Types.ObjectId[];
+  jobs?: Types.ObjectId[];
+  appliedTo?: Types.ObjectId[];
 }

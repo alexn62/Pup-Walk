@@ -1,34 +1,34 @@
-import { Job } from '../../interfaces/job-interface';
-
-const mockJob: Job = {
-  id: '',
-  userId: '',
-  dogId: '',
+import { IJob } from '../../interfaces/job-interface';
+import { Types } from 'mongoose';
+const mockJob: IJob = {
+  id: new Types.ObjectId(),
+  user: new Types.ObjectId(),
+  dog: new Types.ObjectId(),
   title: 'Quick Walk',
   details: 'Super chill dog need her walkie.',
-  location: { latitude: 53, longitude: 13 },
+  jobLocation: { type: { type: 'JobLocation' }, coordinates: [53, 13] },
   duration: 60,
   hourlyPay: 18,
-  startTime: '05 October 2021 14:48 UTC',
+  startTime: new Date('05 October 2021 14:48 UTC'),
   status: 'open',
-  timePosted: '',
+  timePosted: new Date('05 October 2021 14:48 UTC'),
   candidates: [],
-  acceptedUser: '',
+  acceptedUser: new Types.ObjectId(),
 };
-const mockJob2: Job = {
-  id: '',
-  userId: '',
-  dogId: '',
+const mockJob2: IJob = {
+  id: new Types.ObjectId(),
+  user: new Types.ObjectId(),
+  dog: new Types.ObjectId(),
   title: 'Quick Walkie',
   details: 'Super chill dog need her walkie.',
-  location: { latitude: 53.1, longitude: 13 },
+  jobLocation: { type: { type: 'JobLocation' }, coordinates: [53.1, 13] },
   duration: 60,
   hourlyPay: 18,
-  startTime: '05 October 2021 14:48 UTC',
+  startTime: new Date('05 October 2021 14:48 UTC'),
   status: 'open',
-  timePosted: '',
+  timePosted: new Date('05 October 2021 14:48 UTC'),
   candidates: [],
-  acceptedUser: '',
+  acceptedUser: new Types.ObjectId(),
 };
 
 export { mockJob, mockJob2 };

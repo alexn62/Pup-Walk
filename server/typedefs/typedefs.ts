@@ -1,5 +1,4 @@
-const { gql } = require('apollo-server');
-
+import { gql } from 'apollo-server';
 const typedefinitions = gql`
   type Query {
     getUser(id: String!): User
@@ -67,7 +66,7 @@ const typedefinitions = gql`
     dog: Dog!
     title: String!
     details: String
-    location: JobLocation!
+    jobLocation: JobLocation!
     duration: Int!
     hourlyPay: Int!
     timePosted: String!
@@ -77,8 +76,8 @@ const typedefinitions = gql`
   }
 
   type JobLocation {
-    longitude: Float!
-    latitude: Float!
+    type: String
+    coordinates: [Float]
   }
 `;
 

@@ -1,15 +1,17 @@
 import { Dog } from '../schemas/dogSchema';
 import { addDogToUser } from './userQueries';
+import { Types, HydratedDocument } from 'mongoose';
+import { IDog } from '../../interfaces/dog-interface';
 
 const addDog = async (
-  owner: string,
+  owner: Types.ObjectId,
   name: string,
   age: number,
   sex: string,
   breed: string,
   description: string,
   dateAdded?: Date
-) => {
+): Promise<HydratedDocument<IDog> | null> => {
   const dog = new Dog({
     owner: owner,
     name: name,
@@ -20,17 +22,13 @@ const addDog = async (
     description: description,
   });
   const response = await dog.save();
-  await addDogToUser(owner, response._id.toString());
+  await addDogToUser(owner, response._id);
   return response;
 };
 
-const getAllDogs = async () => {
-  const response = await Dog.find();
-  return response;
-};
-const getDog = async (id: String) => {
+const getDog = async (id: Types.ObjectId): Promise<HydratedDocument<IDog> | null> => {
   const response = await Dog.findOne({ _id: id }).exec();
   return response;
 };
 
-export { addDog, getAllDogs, getDog };
+export { addDog, getDog };

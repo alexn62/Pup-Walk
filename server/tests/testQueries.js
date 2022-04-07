@@ -136,9 +136,8 @@ const addJob = gql`
       id
       details
       title
-      location {
-        latitude
-        longitude
+      jobLocation {
+        coordinates
       }
       hourlyPay
       status
@@ -159,6 +158,9 @@ const getJob = gql`
       candidates {
         id
       }
+      jobLocation {
+        coordinates
+      }
     }
   }
 `;
@@ -167,9 +169,8 @@ const getJobsCloseBy = gql`
   query getJobsCloseBy($maxDistance: Float!, $startingPoint: [Float!]) {
     getJobsCloseBy(maxDistance: $maxDistance, startingPoint: $startingPoint) {
       title
-      location {
-        latitude
-        longitude
+      jobLocation {
+        coordinates
       }
     }
   }
