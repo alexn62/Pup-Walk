@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
-import { getJob } from '../services/api.service';
+import * as api from '../services/api.service';
 
 import NewPostItem from '../components/NewPostItem';
 
 const NewJobs = () => {
   // const [posts, setPosts] = useState([]);
-  const { error, loading, data } = useQuery(getJob, { variables: { getJobId: '624f09a217720abf637965b7' } });
+  const { error, loading, data } = useQuery(api.getJob, { variables: { getJobId: '624f09a217720abf637965b7' } });
   // const postElements = <NewPostItem {...data.getPost}></NewPostItem>;
   if (loading) return null;
   return (
@@ -19,7 +19,7 @@ const NewJobs = () => {
         >
           loco
         </button> */}
-        <NewPostItem {...data.getJob}></NewPostItem>
+        {data && <NewPostItem {...data.getJob}></NewPostItem>}
       </div>
     </div>
   );

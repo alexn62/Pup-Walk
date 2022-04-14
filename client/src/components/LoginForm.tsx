@@ -3,7 +3,7 @@ import MainButton from './MainButton';
 const LoginForm = () => {
   return (
     <div className="flex flex-col mb-auto">
-      <div className="bg-kWhiteDark bg-opacity-80 rounded-2xl p-[30px] mx-4 h-[430px] max-w-[390px] flex flex-col justify-between">
+      <div className="bg-kWhiteDark bg-opacity-80 shadow-lg rounded-2xl p-[30px] mx-4 h-[430px] max-w-[390px] flex flex-col justify-between">
         <p className="text-xl text-kBlue">Hello Again!</p>
         <p className="text-sm px-3">Please enter your email and password to login</p>
         <div>
