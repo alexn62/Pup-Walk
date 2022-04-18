@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth-context';
 import MainButton from './MainButton';
 
@@ -10,26 +11,30 @@ type LoginInputs = {
 };
 const LoginForm = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginInputs>();
-
+  const { register, handleSubmit } = useForm<LoginInputs>();
+  const [error, setError] = useState('');
   const authContext = useAuth();
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
-    let from = location.pathname || '/';
-    await authContext?.signIn(data.email, data.password, () => {
-      navigate('/home', { replace: true });
-    });
+    try {
+      setError('');
+      await authContext?.signIn(data.email, data.password, () => {
+        navigate('/home', { replace: true });
+      });
+    } catch (e) {
+      setError('Unable to login!');
+    }
   };
   return (
     <div className="flex flex-col items-center">
       <div className="bg-kWhiteDark bg-opacity-80 shadow-lg rounded-2xl p-[30px] mx-4 h-[430px] max-w-[390px] flex flex-col justify-between">
         <p className="text-xl text-kBlue mx-auto">Hello Again!</p>
-        <p className="text-sm px-3">Please enter your email and password to login</p>
+        {error !== '' && (
+          <p className="w-full text-center bg-red-200 text-red-600 p-2 my-2 border border-red-600 rounded-lg">
+            {error}
+          </p>
+        )}
+        <p className="text-sm px-3 text-center">Please enter your email and password to login</p>
         <div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
