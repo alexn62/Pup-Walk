@@ -2,7 +2,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAuth } from '../store/auth-context';
 import MainButton from './MainButton';
 
-type Inputs = {
+type SignUpInputs = {
   email: string;
   password: string;
   confirmPassword: string;
@@ -13,10 +13,10 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>();
+  } = useForm<SignUpInputs>();
 
   const authContext = useAuth();
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     console.log({ data });
     await authContext?.signUp(data.email, data.password);
   };
