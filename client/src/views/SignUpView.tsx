@@ -1,11 +1,9 @@
-import NavigationBar from '../components/AuthNavigationBar';
 import SignUpForm from '../components/SignUpForm';
 
 const SignUpView = () => {
   return (
     <div className="h-screen overflow-hidden relative">
-      <div className="flex flex-col absolute justify-center w-screen h-screen items-center ">
-        <NavigationBar />
+      <div className="flex flex-col absolute justify-around w-screen h-screen items-center">
         <SignUpForm />
       </div>
       <div className="inline-block overflow-hidden">

@@ -10,12 +10,10 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <AuthContextProvider>
-        <div className="App">
-          {/* <LoginView /> */}
+        {/* <LoginView /> */}
 
-          {/* <SignUpView /> */}
-          <HomeView />
-        </div>
+        <SignUpView />
+        {/* <HomeView /> */}
       </AuthContextProvider>
     </ApolloProvider>
   );

@@ -11,4 +11,5 @@ export interface IUser {
   dogs?: Types.ObjectId[];
   jobs?: Types.ObjectId[];
   appliedTo?: Types.ObjectId[];
+  ratings?: number[];
 }

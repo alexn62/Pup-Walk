@@ -21,10 +21,10 @@ const SignUpForm = () => {
     await authContext?.signUp(data.email, data.password);
   };
   return (
-    <div className="flex flex-col mb-auto">
+    <div className="flex flex-col items-center">
       <div className="bg-kWhiteDark bg-opacity-80 shadow-lg rounded-2xl p-[30px] mx-4 h-[430px] max-w-[390px] flex flex-col justify-between ">
-        <p className="text-xl text-kBlue">Welcome!</p>
-        <p className="text-sm px-3">Please enter your email and password to sign up</p>
+        <p className="text-xl text-kBlue mx-auto">Welcome!</p>
+        <p className="text-sm px-3 text-left">Please enter your email and password to sign up</p>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col space-y-1">
             <input
@@ -59,7 +59,7 @@ const SignUpForm = () => {
             <MainButton type="submit" title="SING UP"></MainButton>
           </div>
         </form>
-        <p className="text-kBlue text-sm">or continue with...</p>
+        <p className="text-kBlue text-sm mx-auto">or continue with...</p>
         <div>
           <div className="flex">
             <button className="w-full bg-white rounded-md p-2 text-black text-sm mr-1">GOOGLE</button>

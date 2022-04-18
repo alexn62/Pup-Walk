@@ -1,8 +1,6 @@
 import { FC } from 'react';
-import { BsThreeDots } from 'react-icons/bs';
 import { FaStar } from 'react-icons/fa';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
-import { IoLogoUsd } from 'react-icons/io';
 import { Job } from '../interfaces/interfaces';
 import MainButton from './MainButton';
 
@@ -36,9 +34,7 @@ const NewPostItem: FC<Job> = (job: Job) => {
             ></img>
           </div>
           <div className="flex flex-col justify-between items-start">
-            <p className="font-semibold text-kBlue text-lg">{`${user.firstName} ${
-              user.middleName ? user.middleName : ''
-            } ${user.lastName}`}</p>
+            <p className="font-semibold text-kBlue text-lg">{`${user.firstName}`}</p>
             <div className="flex">{stars}</div>
           </div>
         </div>
@@ -51,12 +47,11 @@ const NewPostItem: FC<Job> = (job: Job) => {
             <img src={dog.dogPhoto} alt="" className="object-cover h-full"></img>
           </div>
         </div>
-        <BsThreeDots className="ml-2 hover:cursor-pointer" />
       </div>
       <p className="font-semibold">Details</p>
       <p className="text-left">{job.details}</p>
       <div className="flex items-stretch w-full space-x-2">
-        <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kBlueLight">
+        <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kBlueLight flex-grow">
           <p className="text-lg text-kBlue">{job.city ?? ''}</p>
           <p className="text-kMidBlue">{job.locality ?? ''}</p>
           <HiLocationMarker color="#4971FF" />
@@ -66,11 +61,14 @@ const NewPostItem: FC<Job> = (job: Job) => {
           <p className="text-kMidBlue">{startTime}</p>
           <HiOutlineClock color="#4971FF" />
         </div>
-        <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kGreenLight">
-          <p className="text-lg text-kGreen line-clamp-1">$ {job.hourlyPay} / hr</p>
-          <p className="text-kMidGreen line-clamp-1">Total {(job.hourlyPay * job.duration) / 60} USD</p>
-          <IoLogoUsd color="#67C73A" />
-        </div>
+      </div>
+      <div className="w-full flex items-center space-x-2  ">
+        <p className="rounded-2xl p-2 bg-kGreenLight text-lg text-kGreen line-clamp-1 text-center">
+          $ {job.hourlyPay} / hr
+        </p>
+        <p className="rounded-2xl p-2 bg-kGreenLight text-lg text-kGreen line-clamp-1 flex-grow text-center border border-kGreen">
+          Total: {(job.hourlyPay * job.duration) / 60} USD
+        </p>
       </div>
       <div className="flex space-x-2 w-full">
         <MainButton title="SAVE" invert={true} />

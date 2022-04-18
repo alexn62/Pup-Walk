@@ -168,6 +168,12 @@ const res = {
       }
       return jobs;
     },
+    rating: (user: IUser): number | undefined => {
+      if (user.ratings === undefined) {
+        return undefined;
+      }
+      return user.ratings.reduce((a, b) => a + b) / user.ratings.length;
+    },
   },
 
   Dog: {
