@@ -3,7 +3,15 @@ import resolvers from './resolvers/resolvers';
 import typeDefs from './typedefs/typedefs';
 import mongoose from 'mongoose';
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: ({ req }) => {
+    const token = req.headers.authorization || '';
+    const user = '';
+    return { user };
+  },
+});
 
 const SERVER_PORT = 4000;
 const HOST = 'localhost:';

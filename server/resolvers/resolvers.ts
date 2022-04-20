@@ -111,6 +111,7 @@ const res = {
       _: any,
       { user, dog, details, longitude, title, latitude, duration, hourlyPay, startTime }: AddJobInput
     ) => {
+      console.log(user);
       const response = await jobQueries.addJob(
         new Types.ObjectId(user),
         new Types.ObjectId(dog),

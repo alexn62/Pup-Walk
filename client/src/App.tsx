@@ -4,6 +4,7 @@ import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import HomeView from './views/HomeView';
 import SignUpView from './views/SignUpView';
 import LoginView from './views/LoginView';
+import AddJob from './views/AddJob';
 // import AuthContext from './store/auth-context';
 import { client } from './services/api.service';
 import { AuthContextProvider, useAuth } from './store/auth-context';
@@ -22,6 +23,7 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route path="/addJob" element={<AddJob />} />
         </Routes>
       </AuthContextProvider>
     </ApolloProvider>

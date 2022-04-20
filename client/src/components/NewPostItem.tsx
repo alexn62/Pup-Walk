@@ -62,12 +62,12 @@ const NewPostItem: FC<Job> = (job: Job) => {
           <HiOutlineClock color="#4971FF" />
         </div>
       </div>
-      <div className="w-full flex items-center space-x-2  ">
+      <div className="w-full flex items-center justify-between  ">
         <p className="rounded-2xl p-2 bg-kGreenLight text-lg text-kGreen line-clamp-1 text-center">
           $ {job.hourlyPay} / hr
         </p>
-        <p className="rounded-2xl p-2 bg-kGreenLight text-lg text-kGreen line-clamp-1 flex-grow text-center border border-kGreen">
-          Total: {(job.hourlyPay * job.duration) / 60} USD
+        <p className="ml-auto line-clamp-1 text-right font-bold ">
+          Projected Total: {(job.hourlyPay * job.duration) / 60} USD
         </p>
       </div>
       <div className="flex space-x-2 w-full">
