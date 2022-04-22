@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import MainButton from '../components/MainButton';
 import TopBar from '../components/TopBar';

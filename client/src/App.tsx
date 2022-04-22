@@ -11,6 +11,7 @@ import NewJobs from './views/NewJobs';
 import MyJobs from './views/MyJobs';
 import MyListings from './views/MyListings';
 import Messages from './views/Messages';
+import SetupUser from './views/SetupUser';
 import Account from './views/Account';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Navigate to="/home/newJobs" />} />
           <Route path="/login" element={<LoginView />} />
           <Route path="/signup" element={<SignUpView />} />
+          <Route path="/setupUser" element={<SetupUser />} />
           <Route
             path="/home"
             element={
@@ -53,6 +55,7 @@ export default App;
 
 const ProtectedRoute = ({ children }) => {
   const auth = useAuth();
+  console.log(auth.currentUser?.email, auth.currentMongoUser?.firstName, auth.loading);
   if (auth.loading) {
     return <div>Loading...</div>;
   }

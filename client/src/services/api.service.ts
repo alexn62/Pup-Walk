@@ -133,8 +133,19 @@ export const getJobsNearby = gql`
   }
 `;
 
-export const getUserByEmailAddress = async (email: string) => {
-  const response = await client.query({ query: getUserByEmail, variables: { email: email } });
+export const addUser = gql`
+  mutation addUser($email: String!, $firstName: String!, $lastName: String!, $sex: String, $middleName: String) {
+    addUser(email: $email, firstName: $firstName, lastName: $lastName, sex: $sex, middleName: $middleName) {
+      id
+    }
+  }
+`;
 
-  return response.data.getUserByEmail;
+export const getUserByEmailAddress = async (email: string) => {
+  try {
+    const response = await client.query({ query: getUserByEmail, variables: { email: email } });
+    return response.data.getUserByEmail;
+  } catch {
+    return null;
+  }
 };

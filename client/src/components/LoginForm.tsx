@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../store/auth-context';
 import MainButton from './MainButton';
 
@@ -18,9 +18,8 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     try {
       setError('');
-      await authContext?.signIn(data.email, data.password, () => {
-        navigate('/home/newJobs');
-      });
+      await authContext?.signIn(data.email, data.password);
+      navigate('/home/newJobs');
     } catch (e) {
       setError('Unable to login!');
     }
@@ -63,7 +62,9 @@ const LoginForm = () => {
           </div>
         </div>
       </div>
-      <p className="text-kBlue text-sm mt-2 hover:underline hover:cursor-pointer">Sign Up instead</p>
+      <Link to="/signup" className="text-kBlue text-sm mt-2 hover:underline hover:cursor-pointer">
+        Sign Up instead
+      </Link>
     </div>
   );
 };

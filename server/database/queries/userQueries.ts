@@ -50,4 +50,13 @@ const applyForJob = async (
   return null;
 };
 
-export { addUser, getUser, addDogToUser, deleteJob, applyForJob };
+const getUserByEmail = async (email: string): Promise<HydratedDocument<IUser> | null> => {
+  try {
+    const user = await User.findOne({ email: email });
+    return user;
+  } catch (_) {
+    return null;
+  }
+};
+
+export { addUser, getUser, addDogToUser, deleteJob, applyForJob, getUserByEmail };

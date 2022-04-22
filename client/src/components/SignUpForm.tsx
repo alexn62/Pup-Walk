@@ -1,7 +1,9 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useAuth } from '../store/auth-context';
 import MainButton from './MainButton';
-
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Link, useNavigate } from 'react-router-dom';
 type SignUpInputs = {
   email: string;
   password: string;
@@ -9,16 +11,26 @@ type SignUpInputs = {
 };
 
 const SignUpForm = () => {
+  const navigate = useNavigate();
+  const formSchema = Yup.object().shape({
+    password: Yup.string().required('Password is mendatory').min(8, 'Password must be at least eight characters long'),
+    confirmPassword: Yup.string()
+      .required('Password is mandatory')
+      .oneOf([Yup.ref('password')], 'Passwords do not match'),
+  });
+  const formOptions = { resolver: yupResolver(formSchema) };
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<SignUpInputs>();
+  } = useForm<SignUpInputs>(formOptions);
 
   const authContext = useAuth();
+
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     console.log({ data });
-    // await authContext?.signUp(data.email, data.password);
+    await authContext?.signUp(data.email, data.password);
+    navigate('/setupUser');
   };
   return (
     <div className="flex flex-col items-center">
@@ -37,23 +49,23 @@ const SignUpForm = () => {
             {errors.email && <span className="text-xs text-red-400 ml-1 mr-auto">This field is required</span>}
             <input
               type={'password'}
+              {...register('password')}
               placeholder="Password"
-              {...register('password', { required: true })}
               className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
                 errors.password ? 'border-red-400' : 'border'
               }`}
             ></input>
-            {errors.password && <span className="text-xs text-red-400 ml-1 mr-auto">This field is required</span>}
+            {errors.password && <span className="text-xs text-red-400 ml-1 mr-auto">{errors.password.message}</span>}
             <input
               type={'password'}
-              {...register('confirmPassword', { required: true })}
-              placeholder="Confirm Password"
+              {...register('confirmPassword')}
+              placeholder={'Confirm Password'}
               className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
                 errors.confirmPassword ? 'border-red-400' : 'border'
               }`}
             ></input>
             {errors.confirmPassword && (
-              <span className="text-xs text-red-400 ml-1 mr-auto">This field is required</span>
+              <span className="text-xs text-red-400 ml-1 mr-auto">{errors.confirmPassword.message}</span>
             )}
             <div className="h-3"></div>
             <MainButton type="submit" title="SING UP"></MainButton>
@@ -67,7 +79,9 @@ const SignUpForm = () => {
           </div>
         </div>
       </div>
-      <p className="text-kBlue text-sm mt-2 hover:underline hover:cursor-pointer">Login instead</p>
+      <Link to="/login" className="text-kBlue text-sm mt-2 hover:underline hover:cursor-pointer">
+        Login instead
+      </Link>
     </div>
   );
 };

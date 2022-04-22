@@ -5,6 +5,7 @@ const typedefinitions = gql`
     getDog(id: String!): Dog
     getJob(id: String!): Job
     getJobsCloseBy(startingPoint: [Float!], maxDistance: Float!): [Job]
+    getUserByEmail(email: String!): User
   }
 
   type Mutation {
