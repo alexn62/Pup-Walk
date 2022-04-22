@@ -12,6 +12,7 @@ import spinner from '../assets/icons/spinner.svg';
 import ToggleButton from '../components/ToggleButton';
 import { useAuth } from '../store/auth-context';
 import { useNavigate } from 'react-router-dom';
+import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator';
 
 // Interfaces
 interface geoLoc {
@@ -142,11 +143,11 @@ const AddJob = () => {
 
   // mutation
 
-  const [addNewJob] = useMutation(api.addJob);
+  const [addNewJob, { loading, data }] = useMutation(api.addJob);
 
   const getVariables = (input: AddJobFormInputs): AddJobVariables => {
     return {
-      user: '624efadb989d6d26dfd1e55d',
+      user: auth?.currentMongoUser?.id!,
       dog: input.dog,
       title: input.title,
       details: input.details,
@@ -161,6 +162,7 @@ const AddJob = () => {
 
   return (
     <>
+      {loading && !data?.addJob && <FullScreenLoadingIndicator></FullScreenLoadingIndicator>}
       <TopBar title="Add Job"></TopBar>
       <div className="p-3 pt-16">
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -366,7 +368,7 @@ const AddJob = () => {
               invert={true}
               onClick={(e) => {
                 e.preventDefault();
-                navigate('/home');
+                navigate(-1);
               }}
             ></MainButton>
             <MainButton title="Add" type="submit"></MainButton>

@@ -20,9 +20,9 @@ const NewPostItem: FC<Job> = (job: Job) => {
     stars.push(<FaStar key={i} color="orange" />);
   }
   return (
-    <div className="shadow-lg rounded-2xl bg-white flex flex-col justify-between items-start p-4 space-y-3">
-      <div className="w-full flex justify-end">
-        <div className="flex mr-auto">
+    <div className="shadow-lg rounded-2xl bg-white flex flex-col justify-between  p-4 space-y-3">
+      <div className="flex justify-between">
+        <div className="flex justify-between">
           <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full mr-2 overflow-hidden">
             <img
               src={

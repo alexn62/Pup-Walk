@@ -102,6 +102,37 @@ export const getUserByEmail = gql`
   }
 `;
 
+export const getJobsNearby = gql`
+  query getJobsCloseBy($maxDistance: Float!, $startingPoint: [Float!]) {
+    getJobsCloseBy(maxDistance: $maxDistance, startingPoint: $startingPoint) {
+      id
+      title
+      details
+      hourlyPay
+      duration
+      startTime
+      locality
+      city
+      jobLocation {
+        coordinates
+      }
+      user {
+        id
+        firstName
+        lastName
+        profilePhoto
+      }
+      dog {
+        id
+        name
+        breed
+        age
+        dogPhoto
+      }
+    }
+  }
+`;
+
 export const getUserByEmailAddress = async (email: string) => {
   const response = await client.query({ query: getUserByEmail, variables: { email: email } });
 
