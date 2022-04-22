@@ -3,11 +3,13 @@ import { auth } from './firebase';
 import { User as fUser } from '@firebase/auth-types';
 import { getUserByEmailAddress } from '../services/api.service';
 import { User } from '../interfaces/interfaces';
+
 interface AuthContextType {
   currentUser: fUser | null | undefined;
   currentMongoUser: User | null | undefined;
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string, callBack: VoidFunction) => Promise<void>;
+  logout: () => Promise<void>;
   loading: boolean;
 }
 
@@ -28,6 +30,11 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     await auth.signInWithEmailAndPassword(email, password);
     callBack();
   };
+
+  const logout = async () => {
+    await auth.signOut();
+    localStorage.removeItem('user');
+  };
   const setMongoUser = async (user: fUser): Promise<void> => {
     const mongoUser = await getUserByEmailAddress(user.email!);
     setCurrentMongoUser(mongoUser);
@@ -36,12 +43,13 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   useEffect(() => {
     setLoading(true);
     const user = localStorage.getItem('user');
-    if (user) {
-      const parsedUser = JSON.parse(user!);
+    if (user && user !== 'null') {
+      const parsedUser = JSON.parse(user);
       setCurrentUser(parsedUser);
       setMongoUser(parsedUser);
     } else {
       const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        console.log('Auth State changed with user: ', user);
         setCurrentUser(user);
         localStorage.setItem('user', JSON.stringify(user));
         if (!user) {
@@ -50,6 +58,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
           setMongoUser(user);
         }
       });
+      setLoading(false);
       return unsubscribe;
     }
     setLoading(false);
@@ -61,6 +70,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     signUp,
     signIn,
     loading,
+    logout,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

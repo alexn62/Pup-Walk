@@ -11,6 +11,7 @@ import NewJobs from './views/NewJobs';
 import MyJobs from './views/MyJobs';
 import MyListings from './views/MyListings';
 import Messages from './views/Messages';
+import Account from './views/Account';
 
 function App() {
   return (
@@ -33,6 +34,14 @@ function App() {
             <Route path="/home/myListings" element={<MyListings />} />
             <Route path="/home/messages" element={<Messages />} />
           </Route>
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <Account />
+              </ProtectedRoute>
+            }
+          ></Route>
           <Route path="/addJob" element={<AddJob />} />
         </Routes>
       </BrowserRouter>
@@ -48,7 +57,6 @@ const ProtectedRoute = ({ children }) => {
     return <div>Loading...</div>;
   }
   if (!auth.currentUser) {
-    console.log('no user');
     return <Navigate to="/login"></Navigate>;
   }
   return children;

@@ -40,8 +40,8 @@ const NewJobs = () => {
       setNewJobs((prev) =>
         [...prev].sort(
           (prevJob, nextJob) =>
-            getDistance([52.51, 13.37], nextJob.jobLocation.coordinates) -
-            getDistance([52.51, 13.37], prevJob.jobLocation.coordinates)
+            getDistance([52.51, 13.37], prevJob.jobLocation.coordinates) -
+            getDistance([52.51, 13.37], nextJob.jobLocation.coordinates)
         )
       );
     }
