@@ -58,3 +58,52 @@ export const addJob = gql`
     }
   }
 `;
+
+export const getUser = gql`
+  query getUser($getUserId: String!) {
+    getUser(id: $getUserId) {
+      id
+      firstName
+      lastName
+      profilePhoto
+      dogs {
+        id
+        name
+        breed
+        dogPhoto
+        age
+      }
+      jobs {
+        title
+      }
+    }
+  }
+`;
+
+export const getUserByEmail = gql`
+  query getUser($email: String!) {
+    getUserByEmail(email: $email) {
+      id
+      email
+      profilePhoto
+      firstName
+      lastName
+      dogs {
+        id
+        name
+        dogPhoto
+        breed
+      }
+      jobs {
+        id
+        title
+      }
+    }
+  }
+`;
+
+export const getUserByEmailAddress = async (email: string) => {
+  const response = await client.query({ query: getUserByEmail, variables: { email: email } });
+
+  return response.data.getUserByEmail;
+};

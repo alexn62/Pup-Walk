@@ -3,7 +3,6 @@ import Messages from './Messages';
 import MyJobs from './MyJobs';
 import NewJobs from './NewJobs';
 import { useState } from 'react';
-// import LeftSideBar from '../components/LeftSideBar';
 const HomeView = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const views = [<NewJobs />, <MyJobs />, <Messages />];

@@ -10,6 +10,8 @@ import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import spinner from '../assets/icons/spinner.svg';
 import ToggleButton from '../components/ToggleButton';
+import { useAuth } from '../store/auth-context';
+import { useNavigate } from 'react-router-dom';
 
 // Interfaces
 interface geoLoc {
@@ -30,6 +32,7 @@ type AddJobFormInputs = {
   hourlyPay: number;
   startTime: Date;
   locationString: string;
+  dog: string;
 };
 
 interface AddJobVariables {
@@ -51,6 +54,9 @@ interface Option {
 }
 
 const AddJob = () => {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
   // duration
   const [durationOptions, setDurationOptions] = useState<Option[]>([
     { label: '30', active: false },
@@ -135,12 +141,13 @@ const AddJob = () => {
   };
 
   // mutation
+
   const [addNewJob] = useMutation(api.addJob);
 
   const getVariables = (input: AddJobFormInputs): AddJobVariables => {
     return {
       user: '624efadb989d6d26dfd1e55d',
-      dog: '624efc55989d6d26dfd1e55f',
+      dog: input.dog,
       title: input.title,
       details: input.details,
       latitude: currentLocation.y,
@@ -184,6 +191,21 @@ const AddJob = () => {
             <p className="text-sm text-red-500 text-right">This field is required</p>
           )}
           {errors.details?.type === 'maxLength' && <p className="text-sm text-red-500 text-right">Too long</p>}
+          {auth?.currentMongoUser?.dogs?.length && (
+            <label>
+              Dog(s):<br></br>
+              <select {...register('dog')} className="my-1 p-2 rounded-md">
+                {auth.currentMongoUser.dogs
+                  .filter((dog) => dog.name !== 'null')
+                  .map((dog) => (
+                    <option key={dog.id} value={dog.id}>
+                      {dog.name}
+                    </option>
+                  ))}
+              </select>
+            </label>
+          )}
+          <br></br>
           <label>
             Duration:
             <div className="flex flex-row items-center space-x-2">
@@ -339,7 +361,14 @@ const AddJob = () => {
             )}
           </div>
           <div className="flex flex-row space-x-2 fixed bottom-0 w-full right-0 p-3">
-            <MainButton title="Cancel" invert={true}></MainButton>
+            <MainButton
+              title="Cancel"
+              invert={true}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/home');
+              }}
+            ></MainButton>
             <MainButton title="Add" type="submit"></MainButton>
           </div>
         </form>

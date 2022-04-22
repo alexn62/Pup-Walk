@@ -18,9 +18,9 @@ const LoginForm = () => {
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     try {
       setError('');
-      await authContext?.signIn(data.email, data.password, () => {
-        navigate('/home', { replace: true });
-      });
+      // await authContext?.signIn(data.email, data.password, () => {
+      //   navigate('/home', { replace: true });
+      // });
     } catch (e) {
       setError('Unable to login!');
     }

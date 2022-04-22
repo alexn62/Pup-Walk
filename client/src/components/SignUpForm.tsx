@@ -18,7 +18,7 @@ const SignUpForm = () => {
   const authContext = useAuth();
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
     console.log({ data });
-    await authContext?.signUp(data.email, data.password);
+    // await authContext?.signUp(data.email, data.password);
   };
   return (
     <div className="flex flex-col items-center">

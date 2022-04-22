@@ -1,19 +1,24 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from './firebase';
 import { User as fUser } from '@firebase/auth-types';
-
+import { getUserByEmailAddress } from '../services/api.service';
+import { User } from '../interfaces/interfaces';
 interface AuthContextType {
   currentUser: fUser | null | undefined;
+  currentMongoUser: User | null | undefined;
   signUp: (email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string, callBack: VoidFunction) => Promise<void>;
+  loading: boolean;
 }
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: { children: any }) => {
   const [currentUser, setCurrentUser] = useState<fUser | null>();
-
+  const [currentMongoUser, setCurrentMongoUser] = useState<User | null>();
+  const [loading, setLoading] = useState(true);
   const signUp = async (email: string, password: string) => {
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     setCurrentUser(userCredential.user);
@@ -23,16 +28,40 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     await auth.signInWithEmailAndPassword(email, password);
     callBack();
   };
+  const setMongoUser = async (user: fUser): Promise<void> => {
+    const mongoUser = await getUserByEmailAddress(user.email!);
+    setCurrentMongoUser(mongoUser);
+  };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setCurrentUser(user);
-    });
-    return unsubscribe;
+    setLoading(true);
+    const user = localStorage.getItem('user');
+    if (user) {
+      const parsedUser = JSON.parse(user!);
+      setCurrentUser(parsedUser);
+      setMongoUser(parsedUser);
+    } else {
+      const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        setCurrentUser(user);
+        localStorage.setItem('user', JSON.stringify(user));
+        if (!user) {
+          setCurrentMongoUser(null);
+        } else {
+          setMongoUser(user);
+        }
+      });
+      return unsubscribe;
+    }
+    setLoading(false);
   }, []);
 
-  const value: AuthContextType = { currentUser, signUp, signIn };
+  const value: AuthContextType = {
+    currentUser,
+    currentMongoUser,
+    signUp,
+    signIn,
+    loading,
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
 export default AuthContext;
