@@ -13,18 +13,7 @@ import ToggleButton from '../components/ToggleButton';
 import { useAuth } from '../store/auth-context';
 import { useNavigate } from 'react-router-dom';
 import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator';
-
-// Interfaces
-interface geoLoc {
-  x: number; // lon
-  y: number; // lat
-  label: string; // formatted address
-  bounds?: [
-    [number, number], // south, west - lat, lon
-    [number, number] // north, east - lat, lon
-  ];
-  raw?: any; // raw
-}
+import { geoLoc } from '../interfaces/interfaces';
 
 type AddJobFormInputs = {
   title: string;
