@@ -48,7 +48,7 @@ const NewPostItem: FC<Job> = (job: Job) => {
           </div>
         </div>
       </div>
-      <p className="font-semibold">Details</p>
+      <p className="font-semibold">{job.title}</p>
       <p className="text-left">{job.details}</p>
       <div className="flex items-stretch w-full space-x-2">
         <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kBlueLight flex-grow">

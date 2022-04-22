@@ -1,16 +1,19 @@
-import { Link } from 'react-router-dom';
+import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { NavLink, useLocation } from 'react-router-dom';
 
-const NavigationBarItem = ({ title, path }: { title: string; path: string }) => {
-  const selected = true;
+const NavigationBarItem = ({ icon, path }: { icon: IconDefinition; path: string }) => {
+  const location = useLocation();
+  const selected = location.pathname === path;
   return (
-    <Link
+    <NavLink
       to={path}
-      className={`px-4 py-3  hover:cursor-pointer rounded-2xl ${
-        selected ? 'font-semibold text-kBlue bg-kBlueLight' : 'text-black hover:bg-gray-200 duration-100'
+      className={`px-4 py-3 hover:cursor-pointer rounded-2xl transition-all ${
+        selected ? 'font-semibold text-kBlue bg-kBlueLight' : 'text-gray-400 hover:bg-gray-200 duration-100'
       }`}
     >
-      {title}
-    </Link>
+      <FontAwesomeIcon icon={icon} />
+    </NavLink>
   );
 };
 

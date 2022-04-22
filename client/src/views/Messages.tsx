@@ -1,9 +1,11 @@
 import Message from '../components/Message';
+import TopBar from '../components/TopBar';
 
 const Messages = () => {
   return (
-    <div className="flex justify-center ">
-      <div className="flex flex-col space-y-2">
+    <div className="flex flex-col items-center w-full">
+      <TopBar title="Messages"></TopBar>
+      <div className="pt-8 flex flex-col space-y-2">
         <Message read={false} />
         <Message read={true} />
       </div>
