@@ -8,18 +8,21 @@ import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../store/auth-context';
 
 const NewJobs = () => {
-  const { loading, data } = useQuery(api.getJobsNearby, {
+  const auth = useAuth();
+  const { loading, data } = useQuery<{ getJobsCloseBy: Job[] }>(api.getJobsNearby, {
     variables: { maxDistance: 100000, startingPoint: [13.37, 52.51] },
   });
   const [loadingLocation, setLoadingLocation] = useState(false);
   const [newJobs, setNewJobs] = useState<Job[]>([]);
   useEffect(() => {
     if (data) {
-      setNewJobs(data.getJobsCloseBy);
+      console.log(auth?.currentMongoUser?.email);
+      setNewJobs(data.getJobsCloseBy.filter((job) => job.user.id !== auth?.currentMongoUser?.id));
     }
-  }, [data]);
+  }, [data, auth?.currentMongoUser?.id]);
   const [currentLocation, setCurrentLocation] = useState<geoLoc>({ x: 13.37, y: 52.51, label: 'Berlin Mitte' });
   const getDistance = (start: number[], end: number[]) => {
     const xDistance = start[0] - end[0];
@@ -48,9 +51,7 @@ const NewJobs = () => {
   };
   return (
     <>
-      {((loading && !data?.getJobsNearby) || loadingLocation) && (
-        <FullScreenLoadingIndicator></FullScreenLoadingIndicator>
-      )}
+      {((loading && !data) || loadingLocation) && <FullScreenLoadingIndicator></FullScreenLoadingIndicator>}
       <div className="flex flex-col items-center w-full">
         <TopBar title="New Jobs"></TopBar>
         <div className="mt-10 pb-2  w-full flex justify-between">

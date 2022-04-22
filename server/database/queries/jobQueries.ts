@@ -40,7 +40,6 @@ const getJobsCloseBy = async (
   startingPoint: number[],
   maxDistance: number
 ): Promise<HydratedDocument<IJob>[] | null> => {
-  console.log({ startingPoint });
   const jobs = await Job.find({
     jobLocation: {
       $near: {
@@ -51,7 +50,8 @@ const getJobsCloseBy = async (
         },
       },
     },
-  });
+    startTime: { $gte: new Date().setDate(new Date().getDate() - 1) },
+  }).sort({ startTime: 1 });
 
   return jobs;
 };

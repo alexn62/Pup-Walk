@@ -96,9 +96,7 @@ const res = {
   Mutation: {
     addUser: async (_: any, { email, firstName, lastName, middleName, sex }: AddUserInput) => {
       // validate add user input
-      console.log('adding user');
       const response = await userQueries.addUser(email, firstName, lastName, middleName, sex);
-      console.log(response);
       return response;
     },
 

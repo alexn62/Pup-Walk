@@ -37,6 +37,8 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   const logout = async () => {
     await auth.signOut();
     localStorage.removeItem('user');
+    setCurrentMongoUser(null);
+    setCurrentUser(null);
   };
 
   useEffect(() => {
