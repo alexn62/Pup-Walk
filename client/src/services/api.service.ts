@@ -141,6 +141,19 @@ export const addUser = gql`
   }
 `;
 
+export const addDog = gql`
+  mutation addDog($name: String!, $sex: String!, $age: Int!, $breed: String!, $description: String!, $owner: ID) {
+    addDog(name: $name, sex: $sex, age: $age, breed: $breed, description: $description, owner: $owner) {
+      id
+      name
+      age
+      sex
+      breed
+      description
+    }
+  }
+`;
+
 export const getUserByEmailAddress = async (email: string) => {
   try {
     const response = await client.query({ query: getUserByEmail, variables: { email: email } });

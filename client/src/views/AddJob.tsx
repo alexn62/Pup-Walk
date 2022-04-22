@@ -151,218 +151,243 @@ const AddJob = () => {
 
   return (
     <>
-      {loading && !data?.addJob && <FullScreenLoadingIndicator></FullScreenLoadingIndicator>}
+      {loading && !data && <FullScreenLoadingIndicator></FullScreenLoadingIndicator>}
       <TopBar title="Add Job"></TopBar>
       <div className="p-3 pt-16">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <label>
-            Title:
+        {auth?.currentMongoUser?.dogs?.length === 0 ? (
+          <div className="w-full  flex flex-col justify-center items-center ">
+            <div className="fixed bottom-4 left-4 right-4 flex flex-col border space-y-3 rounded-lg border-kBlue bg-white p-3 text-center">
+              <div>Before you can post job listings, you need to add your dog(s)!</div>
+              <div className="flex flex-row space-x-2 w-full right-0 ">
+                <MainButton
+                  title="Back"
+                  invert={true}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate(-1);
+                  }}
+                ></MainButton>
+                <MainButton
+                  title="Add Dog"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/addDog');
+                  }}
+                ></MainButton>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label>
+              Title:
+              <input
+                placeholder="Quick walk around the block..."
+                {...register('title', { required: true })}
+                className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
+                  errors.title ? 'border-red-400' : 'border'
+                }`}
+              ></input>
+            </label>
+            {errors.title?.type === 'required' && (
+              <p className="text-sm text-red-500 text-right">This field is required</p>
+            )}
+            <label>
+              Details:
+              <textarea
+                placeholder="The pup needs to get outside..."
+                {...register('details', { required: true, maxLength: 150 })}
+                className={`h-24 w-full rounded-md border focus:border-kBlue p-2 mt-1 text-sm focus:outline-none ${
+                  errors.details ? 'border-red-400' : 'border'
+                }`}
+              ></textarea>
+            </label>
+            {errors.details?.type === 'required' && (
+              <p className="text-sm text-red-500 text-right">This field is required</p>
+            )}
+            {errors.details?.type === 'maxLength' && <p className="text-sm text-red-500 text-right">Too long</p>}
+            {auth?.currentMongoUser?.dogs?.length && (
+              <label>
+                Dog(s):<br></br>
+                <select {...register('dog')} className="my-1 p-2 rounded-md">
+                  {auth.currentMongoUser.dogs
+                    .filter((dog) => dog.name !== 'null')
+                    .map((dog) => (
+                      <option key={dog.id} value={dog.id}>
+                        {dog.name}
+                      </option>
+                    ))}
+                </select>
+              </label>
+            )}
+            <br></br>
+            <label>
+              Duration:
+              <div className="flex flex-row items-center space-x-2">
+                <input
+                  disabled={durationOptions.some((el) => el.active)}
+                  type="number"
+                  placeholder="45"
+                  value={duration}
+                  {...register('duration', {
+                    onChange: (e: any) => {
+                      setDuration(e.target.value);
+                    },
+                  })}
+                  className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
+                    errors.duration ? 'border-red-400' : 'border'
+                  }`}
+                ></input>
+                {durationOptions.map((option) => (
+                  <ToggleButton
+                    key={option.label}
+                    label={option.label}
+                    active={option.active}
+                    onClick={(e: any) => {
+                      e.preventDefault();
+                      clearErrors('duration');
+                      setDuration(option.label);
+                      setDurationOptions((prev) =>
+                        [...prev].map((el) => ({ ...el, active: option.label === el.label ? !el.active : false }))
+                      );
+                    }}
+                  ></ToggleButton>
+                ))}
+                <p>min</p>
+              </div>
+            </label>
+            {errors.duration && <p className="text-sm text-red-500 text-right">The minimum duration is 15 minutes</p>}
+
+            <label>
+              Hourly Pay:
+              <div className="flex flex-row items-center space-x-2">
+                <input
+                  disabled={hourlyPayOptions.some((el) => el.active)}
+                  type="number"
+                  placeholder="18.00"
+                  value={hourlyPay}
+                  {...register('hourlyPay', {
+                    onChange: (e: any) => {
+                      setHourlyPay(e.target.value);
+                    },
+                  })}
+                  className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
+                    errors.hourlyPay ? 'border-red-400' : 'border'
+                  }`}
+                ></input>
+                {hourlyPayOptions.map((option) => (
+                  <ToggleButton
+                    key={option.label}
+                    label={option.label}
+                    active={option.active}
+                    onClick={(e: any) => {
+                      e.preventDefault();
+                      clearErrors('hourlyPay');
+                      setHourlyPay(option.label);
+                      setHourlyPayOptions((prev) =>
+                        [...prev].map((el) => ({ ...el, active: option.label === el.label ? !el.active : false }))
+                      );
+                    }}
+                  ></ToggleButton>
+                ))}
+                <p>USD</p>
+              </div>
+            </label>
+            {errors.hourlyPay && <p className="text-sm text-red-500 text-right">The minimum pay is $10.00</p>}
+            <label>Date and time:</label>
             <input
-              placeholder="Quick walk around the block..."
-              {...register('title', { required: true })}
+              type="datetime-local"
+              {...register('startTime', { required: true })}
               className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
-                errors.title ? 'border-red-400' : 'border'
+                errors.startTime ? 'border-red-400' : 'border'
               }`}
             ></input>
-          </label>
-          {errors.title?.type === 'required' && (
-            <p className="text-sm text-red-500 text-right">This field is required</p>
-          )}
-          <label>
-            Details:
-            <textarea
-              placeholder="The pup needs to get outside..."
-              {...register('details', { required: true, maxLength: 150 })}
-              className={`h-24 w-full rounded-md border focus:border-kBlue p-2 mt-1 text-sm focus:outline-none ${
-                errors.details ? 'border-red-400' : 'border'
-              }`}
-            ></textarea>
-          </label>
-          {errors.details?.type === 'required' && (
-            <p className="text-sm text-red-500 text-right">This field is required</p>
-          )}
-          {errors.details?.type === 'maxLength' && <p className="text-sm text-red-500 text-right">Too long</p>}
-          {auth?.currentMongoUser?.dogs?.length && (
-            <label>
-              Dog(s):<br></br>
-              <select {...register('dog')} className="my-1 p-2 rounded-md">
-                {auth.currentMongoUser.dogs
-                  .filter((dog) => dog.name !== 'null')
-                  .map((dog) => (
-                    <option key={dog.id} value={dog.id}>
-                      {dog.name}
-                    </option>
-                  ))}
-              </select>
-            </label>
-          )}
-          <br></br>
-          <label>
-            Duration:
-            <div className="flex flex-row items-center space-x-2">
-              <input
-                disabled={durationOptions.some((el) => el.active)}
-                type="number"
-                placeholder="45"
-                value={duration}
-                {...register('duration', {
-                  onChange: (e: any) => {
-                    setDuration(e.target.value);
-                  },
-                })}
-                className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
-                  errors.duration ? 'border-red-400' : 'border'
-                }`}
-              ></input>
-              {durationOptions.map((option) => (
-                <ToggleButton
-                  key={option.label}
-                  label={option.label}
-                  active={option.active}
-                  onClick={(e: any) => {
-                    e.preventDefault();
-                    clearErrors('duration');
-                    setDuration(option.label);
-                    setDurationOptions((prev) =>
-                      [...prev].map((el) => ({ ...el, active: option.label === el.label ? !el.active : false }))
-                    );
+            {errors.startTime && <p className="text-sm text-red-500 text-right">Invalid Date</p>}
+
+            <label>Location:</label>
+            <div className="flex flex-row relative items-center">
+              <div className="flex-grow mr-2">
+                <input
+                  disabled={loadingLocation}
+                  autoComplete="off"
+                  onFocus={() => setLocationFocus(true)}
+                  placeholder="Berlin..."
+                  value={loadingLocation ? 'Loading...' : currentLocation.label}
+                  {...register('locationString', {
+                    onChange: (e) => handleSearchQueryChange(e),
+                    onBlur: () => setLocationFocus(false),
+                  })}
+                  className={` w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none mr-4 ${
+                    errors.locationString ? 'border-red-400' : 'border'
+                  }`}
+                ></input>
+                {errors.locationString && <p className="text-sm text-red-500 text-right">Invalid location</p>}
+
+                {locationFocus && searchResults.length > 0 && (
+                  <div className="absolute top-12 w-full bg-white border border-kBlue p-2 flex flex-col max-h-48 overflow-scroll">
+                    {searchResults.map((el) => (
+                      <p
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setLocationFocus(true);
+                        }}
+                        onClick={() => {
+                          handleSearchResultClick(el);
+                          setLocationFocus(false);
+                        }}
+                        className="py-2 text-sm"
+                        key={el.x}
+                      >
+                        {el.label}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {loadingLocation ? (
+                <img src={spinner} alt="spinner"></img>
+              ) : (
+                <FontAwesomeIcon
+                  onClick={() => {
+                    setLoadingLocation(true);
+                    clearErrors('locationString');
+                    navigator.geolocation.getCurrentPosition(async (position) => {
+                      if (position) {
+                        setLoadingLocation(false);
+                        const response = await fetch(
+                          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
+                        );
+                        const data = await response.json();
+                        setCurrentLocation({
+                          label: data.locality,
+                          x: position.coords.longitude,
+                          y: position.coords.latitude,
+                        });
+                      } else {
+                        setLoadingLocation(false);
+                      }
+                    });
                   }}
-                ></ToggleButton>
-              ))}
-              <p>min</p>
-            </div>
-          </label>
-          {errors.duration && <p className="text-sm text-red-500 text-right">The minimum duration is 15 minutes</p>}
-
-          <label>
-            Hourly Pay:
-            <div className="flex flex-row items-center space-x-2">
-              <input
-                disabled={hourlyPayOptions.some((el) => el.active)}
-                type="number"
-                placeholder="18.00"
-                value={hourlyPay}
-                {...register('hourlyPay', {
-                  onChange: (e: any) => {
-                    setHourlyPay(e.target.value);
-                  },
-                })}
-                className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
-                  errors.hourlyPay ? 'border-red-400' : 'border'
-                }`}
-              ></input>
-              {hourlyPayOptions.map((option) => (
-                <ToggleButton
-                  key={option.label}
-                  label={option.label}
-                  active={option.active}
-                  onClick={(e: any) => {
-                    e.preventDefault();
-                    clearErrors('hourlyPay');
-                    setHourlyPay(option.label);
-                    setHourlyPayOptions((prev) =>
-                      [...prev].map((el) => ({ ...el, active: option.label === el.label ? !el.active : false }))
-                    );
-                  }}
-                ></ToggleButton>
-              ))}
-              <p>USD</p>
-            </div>
-          </label>
-          {errors.hourlyPay && <p className="text-sm text-red-500 text-right">The minimum pay is $10.00</p>}
-          <label>Date and time:</label>
-          <input
-            type="datetime-local"
-            {...register('startTime', { required: true })}
-            className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
-              errors.startTime ? 'border-red-400' : 'border'
-            }`}
-          ></input>
-          {errors.startTime && <p className="text-sm text-red-500 text-right">Invalid Date</p>}
-
-          <label>Location:</label>
-          <div className="flex flex-row relative items-center">
-            <div className="flex-grow mr-2">
-              <input
-                disabled={loadingLocation}
-                autoComplete="off"
-                onFocus={() => setLocationFocus(true)}
-                placeholder="Berlin..."
-                value={loadingLocation ? 'Loading...' : currentLocation.label}
-                {...register('locationString', {
-                  onChange: (e) => handleSearchQueryChange(e),
-                  onBlur: () => setLocationFocus(false),
-                })}
-                className={` w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none mr-4 ${
-                  errors.locationString ? 'border-red-400' : 'border'
-                }`}
-              ></input>
-              {errors.locationString && <p className="text-sm text-red-500 text-right">Invalid location</p>}
-
-              {locationFocus && searchResults.length > 0 && (
-                <div className="absolute top-12 w-full bg-white border border-kBlue p-2 flex flex-col max-h-48 overflow-scroll">
-                  {searchResults.map((el) => (
-                    <p
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setLocationFocus(true);
-                      }}
-                      onClick={() => {
-                        handleSearchResultClick(el);
-                        setLocationFocus(false);
-                      }}
-                      className="py-2 text-sm"
-                      key={el.x}
-                    >
-                      {el.label}
-                    </p>
-                  ))}
-                </div>
+                  icon={faLocationCrosshairs}
+                  size="lg"
+                  color="rgb(73 113 255)"
+                  className=" p-2 "
+                />
               )}
             </div>
-            {loadingLocation ? (
-              <img src={spinner} alt="spinner"></img>
-            ) : (
-              <FontAwesomeIcon
-                onClick={() => {
-                  setLoadingLocation(true);
-                  clearErrors('locationString');
-                  navigator.geolocation.getCurrentPosition(async (position) => {
-                    if (position) {
-                      setLoadingLocation(false);
-                      const response = await fetch(
-                        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`
-                      );
-                      const data = await response.json();
-                      setCurrentLocation({
-                        label: data.locality,
-                        x: position.coords.longitude,
-                        y: position.coords.latitude,
-                      });
-                    } else {
-                      setLoadingLocation(false);
-                    }
-                  });
+            <div className="flex flex-row space-x-2 fixed bottom-0 w-full right-0 p-3">
+              <MainButton
+                title="Cancel"
+                invert={true}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate(-1);
                 }}
-                icon={faLocationCrosshairs}
-                size="lg"
-                color="rgb(73 113 255)"
-                className=" p-2 "
-              />
-            )}
-          </div>
-          <div className="flex flex-row space-x-2 fixed bottom-0 w-full right-0 p-3">
-            <MainButton
-              title="Cancel"
-              invert={true}
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(-1);
-              }}
-            ></MainButton>
-            <MainButton title="Add" type="submit"></MainButton>
-          </div>
-        </form>
+              ></MainButton>
+              <MainButton title="Add" type="submit"></MainButton>
+            </div>
+          </form>
+        )}
       </div>
     </>
   );

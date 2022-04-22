@@ -13,6 +13,7 @@ import MyListings from './views/MyListings';
 import Messages from './views/Messages';
 import SetupUser from './views/SetupUser';
 import Account from './views/Account';
+import AddDog from './views/AddDog';
 
 function App() {
   return (
@@ -41,6 +42,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Account />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/addDog"
+            element={
+              <ProtectedRoute>
+                <AddDog />
               </ProtectedRoute>
             }
           ></Route>

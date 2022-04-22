@@ -19,7 +19,6 @@ const NewJobs = () => {
   const [newJobs, setNewJobs] = useState<Job[]>([]);
   useEffect(() => {
     if (data) {
-      console.log(auth?.currentMongoUser?.email);
       setNewJobs(data.getJobsCloseBy.filter((job) => job.user.id !== auth?.currentMongoUser?.id));
     }
   }, [data, auth?.currentMongoUser?.id]);
