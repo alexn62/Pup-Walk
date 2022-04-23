@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import * as api from '../services/api.service';
+import * as jobQueries from '../services/queries/JobQueries';
 
 import NewPostItem from '../components/NewPostItem';
 import TopBar from '../components/TopBar';
@@ -13,7 +13,7 @@ import { useAuth } from '../store/auth-context';
 const NewJobs = () => {
   const auth = useAuth();
 
-  const { loading, data } = useQuery<{ getJobsCloseBy: Job[] }>(api.getJobsNearby, {
+  const { loading, data } = useQuery<{ getJobsCloseBy: Job[] }>(jobQueries.getJobsNearby, {
     variables: { maxDistance: 100000, startingPoint: [13.37, 52.51] },
   });
 

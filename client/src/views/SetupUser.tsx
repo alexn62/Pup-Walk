@@ -3,7 +3,7 @@ import MainButton from '../components/MainButton';
 import { useAuth } from '../store/auth-context';
 import spinner from '../assets/icons/spinner.svg';
 import { useMutation } from '@apollo/client';
-import * as api from '../services/api.service';
+import * as userQueries from '../services/queries/UserQueries';
 type SetupUserInputs = {
   firstName: string;
   middleName?: string;
@@ -12,7 +12,7 @@ type SetupUserInputs = {
 };
 const SetupUser = () => {
   const auth = useAuth();
-  const [addUser, { loading, data, error }] = useMutation(api.addUser);
+  const [addUser, { loading, data, error }] = useMutation(userQueries.addUser);
 
   const {
     register,

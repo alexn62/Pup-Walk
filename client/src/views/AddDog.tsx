@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as api from '../services/api.service';
+import * as dogQueries from '../services/queries/DogQueries';
 import { useAuth } from '../store/auth-context';
 import spinner from '../assets/icons/spinner.svg';
 import MainButton from '../components/MainButton';
@@ -14,7 +14,7 @@ type AddDogInputs = {
 };
 const AddDog = () => {
   const auth = useAuth();
-  const [addDog, { loading, data, error }] = useMutation(api.addDog);
+  const [addDog, { loading, data, error }] = useMutation(dogQueries.addDog);
 
   const {
     register,

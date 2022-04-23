@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import MainButton from '../components/MainButton';
 import TopBar from '../components/TopBar';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
-import * as api from '../services/api.service';
+import * as jobQueries from '../services/queries/JobQueries';
 import debounce from 'lodash.debounce';
 import { faCircleCheck, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -132,7 +132,7 @@ const AddJob = () => {
 
   // mutation
 
-  const [addNewJob, { loading, data }] = useMutation(api.addJob);
+  const [addNewJob, { loading, data }] = useMutation(jobQueries.addJob);
 
   const getVariables = (input: AddJobFormInputs): AddJobVariables => {
     return {
