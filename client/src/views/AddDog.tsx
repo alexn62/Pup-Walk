@@ -44,7 +44,6 @@ const AddDog = () => {
         <p className="text-xl text-kBlue mx-auto">Add your furry friend!</p>
         <p className="text-sm px-3 text-center">Please fill in your details to continue</p>
         <div>
-          <p>{auth?.userSigningUp?.email}</p>
           <p>{error?.toString()}</p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <input

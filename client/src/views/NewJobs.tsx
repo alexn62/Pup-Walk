@@ -9,19 +9,29 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../store/auth-context';
+import MyJobs from './MyJobs';
 
 const NewJobs = () => {
   const auth = useAuth();
+
   const { loading, data } = useQuery<{ getJobsCloseBy: Job[] }>(api.getJobsNearby, {
     variables: { maxDistance: 100000, startingPoint: [13.37, 52.51] },
   });
+
   const [loadingLocation, setLoadingLocation] = useState(false);
+
   const [newJobs, setNewJobs] = useState<Job[]>([]);
+
   useEffect(() => {
     if (data) {
-      setNewJobs(data.getJobsCloseBy.filter((job) => job.user.id !== auth?.currentMongoUser?.id));
+      setNewJobs(
+        data.getJobsCloseBy.filter(
+          (job) => job.user.id !== auth?.currentMongoUser?.id && Number(job.startTime) > Date.now()
+        )
+      );
     }
   }, [data, auth?.currentMongoUser?.id]);
+
   const [currentLocation, setCurrentLocation] = useState<geoLoc>({ x: 13.37, y: 52.51, label: 'Berlin Mitte' });
   const getDistance = (start: number[], end: number[]) => {
     const xDistance = start[0] - end[0];
