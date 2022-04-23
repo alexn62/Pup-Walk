@@ -1,7 +1,5 @@
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
 import { Job } from '../interfaces/interfaces';
-import MyJobs from '../views/MyJobs';
-import MainButton from './MainButton';
 
 const MyListingsItem = ({ job }: { job: Job }) => {
   const startDate = new Date(+job.startTime);

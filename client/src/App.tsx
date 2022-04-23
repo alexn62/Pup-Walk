@@ -13,8 +13,8 @@ import MyListings from './views/MyListings';
 import Messages from './views/Messages';
 import SetupUser from './views/SetupUser';
 import Account from './views/Account';
-import AddDog from './views/AddDog';
 
+import AddDog from './views/AddDog';
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -53,6 +53,7 @@ function App() {
               </ProtectedRoute>
             }
           ></Route>
+
           <Route path="/addJob" element={<AddJob />} />
         </Routes>
       </BrowserRouter>

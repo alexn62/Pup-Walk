@@ -56,6 +56,9 @@ export const getUserByEmail = gql`
       profilePhoto
       firstName
       lastName
+      appliedTo {
+        id
+      }
       dogs {
         id
         name

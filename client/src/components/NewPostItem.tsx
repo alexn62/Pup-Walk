@@ -2,9 +2,11 @@ import { FC } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
 import { Job } from '../interfaces/interfaces';
+import { useAuth } from '../store/auth-context';
 import MainButton from './MainButton';
 
 const NewPostItem: FC<Job> = (job: Job) => {
+  const auth = useAuth();
   const startDate = new Date(+job.startTime);
   const startTime = startDate.toLocaleDateString('en-US', {
     day: '2-digit',
@@ -70,9 +72,16 @@ const NewPostItem: FC<Job> = (job: Job) => {
           Projected Total: {(job.hourlyPay * job.duration) / 60} USD
         </p>
       </div>
-      <div className="flex space-x-2 w-full">
+      <div className="flex space-x-2 w-full ">
         <MainButton title="SAVE" invert={true} />
-        <MainButton title="APPLY" />
+        <MainButton
+          title={`${
+            auth?.currentMongoUser?.appliedTo?.map((job) => job.id).includes(job.id) ? 'APPLIED TO' : 'APPLY'
+          }  `}
+          customBgColor={
+            auth?.currentMongoUser?.appliedTo?.map((job) => job.id).includes(job.id) ? `kGreen` : undefined
+          }
+        />
       </div>
     </div>
   );
