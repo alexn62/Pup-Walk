@@ -23,7 +23,26 @@ export const getUser = gql`
         age
       }
       jobs {
+        id
         title
+        details
+        hourlyPay
+        duration
+        city
+        locality
+        startTime
+        status
+        candidates {
+          id
+          firstName
+          lastName
+          profilePhoto
+        }
+        dog {
+          name
+          breed
+          age
+        }
       }
     }
   }

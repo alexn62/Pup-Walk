@@ -51,19 +51,19 @@ const NewPostItem: FC<Job> = (job: Job) => {
       <p className="font-semibold">{job.title}</p>
       <p className="text-left">{job.details}</p>
       <div className="flex items-stretch w-full space-x-2">
-        <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kBlueLight flex-grow">
+        <div className="flex flex-col items-center justify-between p-2 rounded-md  bg-kBlueLight flex-grow">
           <p className="text-lg text-kBlue">{job.city ?? ''}</p>
           <p className="text-kMidBlue">{job.locality ?? ''}</p>
           <HiLocationMarker color="#4971FF" />
         </div>
-        <div className="flex flex-col items-center justify-between p-2 rounded-2xl  bg-kBlueLight flex-grow">
+        <div className="flex flex-col items-center justify-between p-2 rounded-md  bg-kBlueLight flex-grow">
           <p className="text-lg text-kBlue">{`${job.duration} Minutes`}</p>
           <p className="text-kMidBlue">{startTime}</p>
           <HiOutlineClock color="#4971FF" />
         </div>
       </div>
       <div className="w-full flex items-center justify-between  ">
-        <p className="rounded-2xl p-2 bg-kGreenLight text-lg text-kGreen line-clamp-1 text-center">
+        <p className="rounded-md p-2 bg-kGreenLight text-lg text-kGreen line-clamp-1 text-center">
           $ {job.hourlyPay} / hr
         </p>
         <p className="ml-auto line-clamp-1 text-right font-bold ">

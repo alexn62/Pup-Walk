@@ -18,6 +18,7 @@ export const getJob = gql`
         lastName
       }
       dog {
+        id
         name
         breed
         age

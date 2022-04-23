@@ -62,7 +62,7 @@ const NewJobs = () => {
       {((loading && !data) || loadingLocation) && <FullScreenLoadingIndicator></FullScreenLoadingIndicator>}
       <div className="flex flex-col items-center w-full">
         <TopBar title="New Jobs"></TopBar>
-        <div className="mt-10 pb-2  w-full flex justify-between">
+        <div className="pt-8 pb-2  w-full flex justify-between">
           <div className="flex items-center rounded-md bg-white p-2 space-x-2">
             <div className="rounded-md p-1">{currentLocation.label} </div>
             <FontAwesomeIcon
@@ -96,7 +96,7 @@ const NewJobs = () => {
             <option value="closest">Closest</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-3 w-full">
+        <div className="flex flex-col space-y-3 w-full pb-16">
           {newJobs && newJobs.map((job: Job) => <NewPostItem {...job} key={job.id}></NewPostItem>)}
         </div>
       </div>
