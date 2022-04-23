@@ -6,7 +6,7 @@ import TopBar from '../components/TopBar';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as api from '../services/api.service';
 import debounce from 'lodash.debounce';
-import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import spinner from '../assets/icons/spinner.svg';
 import ToggleButton from '../components/ToggleButton';
@@ -172,6 +172,29 @@ const AddJob = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     navigate('/addDog');
+                  }}
+                ></MainButton>
+              </div>
+            </div>
+          </div>
+        ) : data?.addJob?.id ? (
+          <div className="w-full h-full bg-red-500 flex flex-col justify-center items-center">
+            <div className="absolute bottom-4 left-3 right-3 flex flex-col space-y-36">
+              <FontAwesomeIcon icon={faCircleCheck} color="green" size={'10x'}></FontAwesomeIcon>
+              <div className="flex justify-between space-x-2">
+                <MainButton
+                  title="Back"
+                  invert={true}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/home/newJobs');
+                  }}
+                ></MainButton>
+                <MainButton
+                  title="Add another job"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate('/addJob');
                   }}
                 ></MainButton>
               </div>

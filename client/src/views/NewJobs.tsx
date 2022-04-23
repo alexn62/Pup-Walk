@@ -9,7 +9,6 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from '../store/auth-context';
-import MyJobs from './MyJobs';
 
 const NewJobs = () => {
   const auth = useAuth();
