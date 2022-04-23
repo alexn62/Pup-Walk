@@ -4,20 +4,20 @@ import { useEffect, useState } from 'react';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
 import { Job } from '../interfaces/interfaces';
 
-const applicants = [
-  { firstName: 'Alex' },
-  { firstName: 'Mich' },
-  { firstName: 'Franks' },
-  { firstName: 'Al;lkex' },
-  { firstName: 'Mil;kch' },
-  // { firstName: 'Frjjanks' },
-  // { firstName: 'Alejx' },
-  // { firstName: 'Micjljh' },
-  // { firstName: 'Frakjnnks' },
-  // { firstName: 'Ankllex' },
-  // { firstName: 'Mlknich' },
-  { firstName: 'Fr anks' },
-];
+// const applicants = [
+//   { firstName: 'Alex' },
+//   { firstName: 'Mich' },
+//   { firstName: 'Franks' },
+//   { firstName: 'Al;lkex' },
+//   { firstName: 'Mil;kch' },
+//   // { firstName: 'Frjjanks' },
+//   // { firstName: 'Alejx' },
+//   // { firstName: 'Micjljh' },
+//   // { firstName: 'Frakjnnks' },
+//   // { firstName: 'Ankllex' },
+//   // { firstName: 'Mlknich' },
+//   { firstName: 'Fr anks' },
+// ];
 
 const MyListingsItem = ({ job }: { job: Job }) => {
   const [thisJob, setThisJob] = useState<Job>();
@@ -60,7 +60,7 @@ const MyListingsItem = ({ job }: { job: Job }) => {
                 setShowApplicants((prev) => !prev);
               }}
               className={`text-kBlue px-2 border border-kBlue bg-white rounded-md transition-all disabled:text-gray-400 disabled:border-gray-400`}
-              // disabled={thisJob.candidates.length === 0}
+              disabled={thisJob.candidates.length === 0}
             >
               {showApplicants ? 'Hide' : 'Show'}
             </button>
@@ -72,7 +72,7 @@ const MyListingsItem = ({ job }: { job: Job }) => {
             }`}
           >
             <div className="w-full bg-gradient-to-b from-white to-transparent min-h-[12px] sticky top-0 left-0"></div>
-            {applicants.map((applicant) => (
+            {thisJob.candidates.map((applicant) => (
               <div key={applicant.firstName} className="flex font-semibold justify-between my-1">
                 <div className="flex justify-start space-x-2 items-center">
                   <div className="w-6 h-6 rounded-full bg-kBlueLight"></div>

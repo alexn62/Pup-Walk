@@ -13,7 +13,7 @@ import { useAuth } from '../store/auth-context';
 const NewJobs = () => {
   const auth = useAuth();
 
-  const { loading, data } = useQuery<{ getJobsCloseBy: Job[] }>(jobQueries.getJobsNearby, {
+  const { loading, data, error } = useQuery<{ getJobsCloseBy: Job[] }>(jobQueries.getJobsNearby, {
     variables: { maxDistance: 100000, startingPoint: [13.37, 52.51] },
   });
 
@@ -22,6 +22,7 @@ const NewJobs = () => {
   const [newJobs, setNewJobs] = useState<Job[]>([]);
 
   useEffect(() => {
+    console.log(data);
     if (data) {
       setNewJobs(
         data.getJobsCloseBy.filter(
@@ -29,7 +30,7 @@ const NewJobs = () => {
         )
       );
     }
-  }, [data, auth?.currentMongoUser?.id]);
+  }, [data, auth?.currentMongoUser?.id, error]);
 
   const [currentLocation, setCurrentLocation] = useState<geoLoc>({ x: 13.37, y: 52.51, label: 'Berlin Mitte' });
   const getDistance = (start: number[], end: number[]) => {
@@ -97,7 +98,8 @@ const NewJobs = () => {
           </select>
         </div>
         <div className="flex flex-col space-y-3 w-full pb-16">
-          {newJobs && newJobs.map((job: Job) => <NewPostItem {...job} key={job.id}></NewPostItem>)}
+          {newJobs &&
+            newJobs.map((job: Job) => <NewPostItem job={job} setJobs={setNewJobs} key={job.id}></NewPostItem>)}
         </div>
       </div>
     </>

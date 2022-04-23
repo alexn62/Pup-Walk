@@ -1,11 +1,14 @@
+import spinner from '../assets/icons/spinner.svg';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
   invert?: boolean;
   customBgColor?: string;
   customTextColor?: string;
+  loading?: boolean;
 }
 
 const MainButton: React.FC<ButtonProps> = ({
+  loading = false,
   title,
   invert = false,
   customBgColor = 'kBlue',
@@ -21,7 +24,7 @@ const MainButton: React.FC<ButtonProps> = ({
           : `text-${customTextColor} bg-${customBgColor} hover:bg-kBlueDark`
       } text-sm  hover:shadow-md`}
     >
-      {title}
+      {loading ? <img className="h-4 mx-auto" src={spinner} alt="spinner"></img> : <p>{title}</p>}
     </button>
   );
 };

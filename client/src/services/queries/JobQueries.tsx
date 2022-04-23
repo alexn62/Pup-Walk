@@ -68,6 +68,9 @@ export const getJobsNearby = gql`
       startTime
       locality
       city
+      candidates {
+        id
+      }
       jobLocation {
         coordinates
       }
@@ -83,6 +86,16 @@ export const getJobsNearby = gql`
         breed
         age
         dogPhoto
+      }
+    }
+  }
+`;
+
+export const applyForJob = gql`
+  mutation applyForJob($applicantId: ID!, $jobId: ID!) {
+    applyForJob(applicantId: $applicantId, jobId: $jobId) {
+      candidates {
+        id
       }
     }
   }

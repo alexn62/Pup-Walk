@@ -118,7 +118,6 @@ const res = {
       _: any,
       { user, dog, details, longitude, title, latitude, duration, hourlyPay, startTime }: AddJobInput
     ) => {
-      console.log(user);
       const response = await jobQueries.addJob(
         new Types.ObjectId(user),
         new Types.ObjectId(dog),
@@ -218,13 +217,20 @@ const res = {
       return users;
     },
     city: async (job: IJob): Promise<string> => {
-      const response = await axios.get(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${job.jobLocation.coordinates[1]}&longitude=${job.jobLocation.coordinates[0]}&localityLanguage=en`
-      );
-      const city = response.data.city;
-      const region = response.data.principalSubdivision;
+      console.log('getting city');
+      try {
+        const response = await axios.get(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${job.jobLocation.coordinates[1]}&longitude=${job.jobLocation.coordinates[0]}&localityLanguage=en`
+        );
+        const city = response.data.city;
+        console.log(city);
+        const region = response.data.principalSubdivision;
 
-      return city === '' ? (region === '' ? response.data.countryName : region) : city;
+        return city === '' ? (region === '' ? response.data.countryName : region) : city;
+      } catch (e) {
+        console.log(e);
+        return '';
+      }
     },
     locality: async (job: IJob): Promise<string> => {
       const response = await axios.get(

@@ -1,11 +1,13 @@
-import { FC } from 'react';
+import { useMutation } from '@apollo/client';
 import { FaStar } from 'react-icons/fa';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
-import { Job } from '../interfaces/interfaces';
+import { Job, User } from '../interfaces/interfaces';
 import { useAuth } from '../store/auth-context';
 import MainButton from './MainButton';
+import * as jobQueries from '../services/queries/JobQueries';
+import { useEffect } from 'react';
 
-const NewPostItem: FC<Job> = (job: Job) => {
+const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetStateAction<Job[]>) => void }) => {
   const auth = useAuth();
   const startDate = new Date(+job.startTime);
   const startTime = startDate.toLocaleDateString('en-US', {
@@ -21,6 +23,19 @@ const NewPostItem: FC<Job> = (job: Job) => {
   for (let i = 0; i < Math.floor(3); i++) {
     stars.push(<FaStar key={i} color="orange" />);
   }
+  const [applyMutation, { data, loading }] = useMutation(jobQueries.applyForJob);
+  const handleApply = async (applicantId: string, jobId: string) => {
+    await applyMutation({ variables: { applicantId, jobId } });
+  };
+
+  useEffect(() => {
+    if (data?.applyForJob?.candidates.map((user: User) => user.id).includes(auth?.currentMongoUser?.id)) {
+      console.log('includes me');
+      setJobs((prev) =>
+        [...prev].map((j) => (j.id === job.id ? { ...j, candidates: [...j.candidates, auth?.currentMongoUser!] } : j))
+      );
+    }
+  }, [auth?.currentMongoUser, auth?.currentMongoUser?.id, data, job.id, setJobs]);
   return (
     <div className="shadow-lg rounded-2xl bg-white flex flex-col justify-between  p-4 space-y-3">
       <div className="flex justify-between">
@@ -74,12 +89,24 @@ const NewPostItem: FC<Job> = (job: Job) => {
       </div>
       <div className="flex space-x-2 w-full ">
         <MainButton title="SAVE" invert={true} />
+
         <MainButton
           title={`${
-            auth?.currentMongoUser?.appliedTo?.map((job) => job.id).includes(job.id) ? 'APPLIED TO' : 'APPLY'
+            job.candidates.map((applicant) => applicant.id).includes(auth?.currentMongoUser?.id!)
+              ? 'APPLIED TO'
+              : 'APPLY'
           }  `}
           customBgColor={
-            auth?.currentMongoUser?.appliedTo?.map((job) => job.id).includes(job.id) ? `kGreen` : undefined
+            job.candidates.map((applicant) => applicant.id).includes(auth?.currentMongoUser?.id!)
+              ? `green-500`
+              : undefined
+          }
+          loading={loading && !data}
+          disabled={loading && !data}
+          onClick={
+            !job.candidates.map((candidate) => candidate.id).includes(auth?.currentMongoUser?.id!)
+              ? () => handleApply(auth?.currentMongoUser?.id!, job.id)
+              : () => {}
           }
         />
       </div>

@@ -1,4 +1,3 @@
-import React from 'react';
 import spinner from '../assets/icons/spinner.svg';
 
 const FullScreenLoadingIndicator = () => {
