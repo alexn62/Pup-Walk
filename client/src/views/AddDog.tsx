@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as dogQueries from '../services/queries/DogQueries';
 import { useAuth } from '../store/auth-context';
-import MainButton from '../components/MainButton';
+import MainButton from '../components/Shared/MainButton';
 import { useNavigate } from 'react-router-dom';
 
 type AddDogInputs = {

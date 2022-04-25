@@ -15,7 +15,7 @@ import SetupUser from './views/SetupUser';
 import Account from './views/Account';
 
 import AddDog from './views/AddDog';
-import FullScreenLoadingIndicator from './components/FullScreenLoadingIndicator';
+import FullScreenLoadingIndicator from './components/Shared/FullScreenLoadingIndicator';
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -64,13 +64,13 @@ function App() {
 
 export default App;
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children }: { children: any }) => {
   const auth = useAuth();
-  console.log(auth.currentUser?.email, auth.currentMongoUser?.firstName, auth.loading);
-  if (auth.loading) {
+  console.log(auth?.currentUser?.email, auth?.currentMongoUser?.firstName, auth?.loading);
+  if (auth?.loading) {
     return <FullScreenLoadingIndicator />;
   }
-  if (!auth.currentUser) {
+  if (!auth?.currentUser) {
     return <Navigate to="/login"></Navigate>;
   }
   return children;

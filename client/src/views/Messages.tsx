@@ -1,5 +1,5 @@
-import Message from '../components/Message';
-import TopBar from '../components/TopBar';
+import Message from '../components/Messages/Message';
+import TopBar from '../components/Shared/TopBar';
 
 const Messages = () => {
   return (

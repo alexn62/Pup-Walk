@@ -1,4 +1,4 @@
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../components/Auth/LoginForm';
 import bgimg from '../assets/images/corgi_sit.jpg';
 const LoginView = () => {
   return (

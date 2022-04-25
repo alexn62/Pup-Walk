@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator';
-import MyJobsSection from '../components/MyJobsSection';
-import TopBar from '../components/TopBar';
+import FullScreenLoadingIndicator from '../components/Shared/FullScreenLoadingIndicator';
+import MyJobsSection from '../components/MyJobs/MyJobsSection';
+import TopBar from '../components/Shared/TopBar';
 import { Job, User } from '../interfaces/interfaces';
 import * as userQueries from '../services/queries/UserQueries';
 import { useAuth } from '../store/auth-context';

@@ -3,9 +3,9 @@ import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
-import * as jobQueries from '../services/queries/JobQueries';
-import { Job } from '../interfaces/interfaces';
-import MainButton from './MainButton';
+import * as jobQueries from '../../services/queries/JobQueries';
+import { Job } from '../../interfaces/interfaces';
+import MainButton from '../Shared/MainButton';
 
 const MyListingsItem = ({ job }: { job: Job }) => {
   const [thisJob, setThisJob] = useState<Job>();

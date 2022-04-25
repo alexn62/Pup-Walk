@@ -1,19 +1,21 @@
 import { useMutation } from '@apollo/client';
 import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import MainButton from '../components/MainButton';
-import TopBar from '../components/TopBar';
+import MainButton from '../components/Shared/MainButton';
+import TopBar from '../components/Shared/TopBar';
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import * as jobQueries from '../services/queries/JobQueries';
 import debounce from 'lodash.debounce';
-import { faCircleCheck, faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import spinner from '../assets/icons/spinner.svg';
-import ToggleButton from '../components/ToggleButton';
+import ToggleButton from '../components/Shared/ToggleButton';
 import { useAuth } from '../store/auth-context';
 import { useNavigate } from 'react-router-dom';
-import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator';
+import FullScreenLoadingIndicator from '../components/Shared/FullScreenLoadingIndicator';
 import { geoLoc } from '../interfaces/interfaces';
+import NoDogsYet from '../components/AddJob/NoDogsYet';
+import BackOrAddAnotherJob from '../components/AddJob/BackOrAddAnotherJob';
 
 type AddJobFormInputs = {
   title: string;
@@ -126,7 +128,7 @@ const AddJob = () => {
     if (!valid) return;
     const variables = getVariables(data);
 
-    const response = await addNewJob({ variables: variables });
+    await addNewJob({ variables: variables });
   };
 
   // mutation
@@ -144,61 +146,19 @@ const AddJob = () => {
       duration: +duration,
       hourlyPay: +hourlyPay,
       startTime: input.startTime.toString(),
-      status: 'OPEN',
+      status: 'open',
     };
   };
 
   return (
     <>
-      {loading && !data && <FullScreenLoadingIndicator></FullScreenLoadingIndicator>}
-      <TopBar title="Add Job"></TopBar>
+      {loading && !data && <FullScreenLoadingIndicator />}
+      <TopBar title="Add Job" />
       <div className="p-3 pt-16">
         {auth?.currentMongoUser?.dogs?.length === 0 ? (
-          <div className="w-full  flex flex-col justify-center items-center ">
-            <div className="fixed bottom-4 left-4 right-4 flex flex-col border space-y-3 rounded-lg border-kBlue bg-white p-3 text-center">
-              <div>Before you can post job listings, you need to add your dog(s)!</div>
-              <div className="flex flex-row space-x-2 w-full right-0 ">
-                <MainButton
-                  title="Back"
-                  invert={true}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate(-1);
-                  }}
-                ></MainButton>
-                <MainButton
-                  title="Add Dog"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/addDog');
-                  }}
-                ></MainButton>
-              </div>
-            </div>
-          </div>
+          <NoDogsYet />
         ) : data?.addJob?.id ? (
-          <div className="w-full h-full bg-red-500 flex flex-col justify-center items-center">
-            <div className="absolute bottom-4 left-3 right-3 flex flex-col space-y-36">
-              <FontAwesomeIcon icon={faCircleCheck} color="green" size={'10x'}></FontAwesomeIcon>
-              <div className="flex justify-between space-x-2">
-                <MainButton
-                  title="Back"
-                  invert={true}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/home/newJobs');
-                  }}
-                ></MainButton>
-                <MainButton
-                  title="Add another job"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate('/addJob');
-                  }}
-                ></MainButton>
-              </div>
-            </div>
-          </div>
+          <BackOrAddAnotherJob />
         ) : (
           <form onSubmit={handleSubmit(onSubmit)}>
             <label>
@@ -209,7 +169,7 @@ const AddJob = () => {
                 className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
                   errors.title ? 'border-red-400' : 'border'
                 }`}
-              ></input>
+              />
             </label>
             {errors.title?.type === 'required' && (
               <p className="text-sm text-red-500 text-right">This field is required</p>
@@ -230,7 +190,8 @@ const AddJob = () => {
             {errors.details?.type === 'maxLength' && <p className="text-sm text-red-500 text-right">Too long</p>}
             {auth?.currentMongoUser?.dogs?.length && (
               <label>
-                Dog(s):<br></br>
+                Dog(s):
+                <br />
                 <select {...register('dog')} className="my-1 p-2 rounded-md">
                   {auth.currentMongoUser.dogs
                     .filter((dog) => dog.name !== 'null')
@@ -242,7 +203,7 @@ const AddJob = () => {
                 </select>
               </label>
             )}
-            <br></br>
+            <br />
             <label>
               Duration:
               <div className="flex flex-row items-center space-x-2">
@@ -259,7 +220,7 @@ const AddJob = () => {
                   className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
                     errors.duration ? 'border-red-400' : 'border'
                   }`}
-                ></input>
+                />
                 {durationOptions.map((option) => (
                   <ToggleButton
                     key={option.label}
@@ -296,7 +257,7 @@ const AddJob = () => {
                   className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
                     errors.hourlyPay ? 'border-red-400' : 'border'
                   }`}
-                ></input>
+                />
                 {hourlyPayOptions.map((option) => (
                   <ToggleButton
                     key={option.label}
@@ -323,7 +284,7 @@ const AddJob = () => {
               className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
                 errors.startTime ? 'border-red-400' : 'border'
               }`}
-            ></input>
+            />
             {errors.startTime && <p className="text-sm text-red-500 text-right">Invalid Date</p>}
 
             <label>Location:</label>
@@ -342,7 +303,7 @@ const AddJob = () => {
                   className={` w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none mr-4 ${
                     errors.locationString ? 'border-red-400' : 'border'
                   }`}
-                ></input>
+                />
                 {errors.locationString && <p className="text-sm text-red-500 text-right">Invalid location</p>}
 
                 {locationFocus && searchResults.length > 0 && (

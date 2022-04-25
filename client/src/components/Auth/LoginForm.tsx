@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../store/auth-context';
-import MainButton from './MainButton';
-
+import { useAuth } from '../../store/auth-context';
+import MainButton from '../Shared/MainButton';
 type LoginInputs = {
   email: string;
   password: string;

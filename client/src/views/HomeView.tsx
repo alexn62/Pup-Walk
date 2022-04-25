@@ -1,4 +1,4 @@
-import MainNavigationBar from '../components/MainNavigationBar';
+import MainNavigationBar from '../components/Navigation/MainNavigationBar';
 
 import { Outlet } from 'react-router-dom';
 const HomeView = () => {

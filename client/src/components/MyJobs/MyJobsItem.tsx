@@ -1,10 +1,10 @@
 import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
-import { Job } from '../interfaces/interfaces';
-import MainButton from './MainButton';
-import * as jobQueries from '../services/queries/JobQueries';
-import { useAuth } from '../store/auth-context';
+import { Job } from '../../interfaces/interfaces';
+import MainButton from '../Shared/MainButton';
+import * as jobQueries from '../../services/queries/JobQueries';
+import { useAuth } from '../../store/auth-context';
 
 const MyJobsItem = ({ job }: { job: Job }) => {
   const auth = useAuth();

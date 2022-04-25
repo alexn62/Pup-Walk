@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import MainButton from '../components/MainButton';
-import TopBar from '../components/TopBar';
+import MainButton from '../components/Shared/MainButton';
+import TopBar from '../components/Shared/TopBar';
 import { useAuth } from '../store/auth-context';
 
 const Account = () => {

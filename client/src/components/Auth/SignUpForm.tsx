@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useAuth } from '../store/auth-context';
-import MainButton from './MainButton';
+import { useAuth } from '../../store/auth-context';
+import MainButton from '../Shared/MainButton';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Link, useNavigate } from 'react-router-dom';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Job } from '../interfaces/interfaces';
+import { Job } from '../../interfaces/interfaces';
 import MyJobsItem from './MyJobsItem';
 
 const MyJobsSection = ({ title, jobs }: { title: string; jobs: Job[] }) => {

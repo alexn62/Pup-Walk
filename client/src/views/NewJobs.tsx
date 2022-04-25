@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client';
 import * as jobQueries from '../services/queries/JobQueries';
-import NewPostItem from '../components/NewPostItem';
-import TopBar from '../components/TopBar';
+import NewPostItem from '../components/NewPosts/NewPostItem';
+import TopBar from '../components/Shared/TopBar';
 import { geoLoc, Job } from '../interfaces/interfaces';
-import FullScreenLoadingIndicator from '../components/FullScreenLoadingIndicator';
+import FullScreenLoadingIndicator from '../components/Shared/FullScreenLoadingIndicator';
 import { useCallback, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
@@ -108,11 +108,12 @@ const NewJobs = () => {
           </div>
 
           <select onChange={handleMaxDistanceChange} className="ml-1 p-2 rounded-md">
-            <option value={1000}>1 km</option>
-            <option value={3000}>3 km</option>
-            <option value={5000}>5 km</option>
             <option value={10000}>10 km</option>
+            <option value={5000}>5 km</option>
+            <option value={3000}>3 km</option>
+            <option value={1000}>1 km</option>
           </select>
+
           <select onChange={handleChange} className="ml-1 p-2 rounded-md">
             <option value="upcoming">Upcoming</option>
             <option value="closest">Closest</option>

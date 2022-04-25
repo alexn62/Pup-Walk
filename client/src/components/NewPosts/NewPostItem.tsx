@@ -1,10 +1,10 @@
 import { useMutation } from '@apollo/client';
 import { FaStar } from 'react-icons/fa';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
-import { Job, User } from '../interfaces/interfaces';
-import { useAuth } from '../store/auth-context';
-import MainButton from './MainButton';
-import * as jobQueries from '../services/queries/JobQueries';
+import { Job, User } from '../../interfaces/interfaces';
+import { useAuth } from '../../store/auth-context';
+import MainButton from '../Shared/MainButton';
+import * as jobQueries from '../../services/queries/JobQueries';
 import { useEffect } from 'react';
 
 const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetStateAction<Job[]>) => void }) => {

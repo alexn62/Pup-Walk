@@ -1,4 +1,4 @@
-import spinner from '../assets/icons/spinner.svg';
+import spinner from '../../assets/icons/spinner.svg';
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string;
   invert?: boolean;

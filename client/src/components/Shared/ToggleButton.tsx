@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ToggleButton = ({ label, active, onClick }: { label: string; active: boolean; onClick: (e: any) => void }) => {
   return (
     <button

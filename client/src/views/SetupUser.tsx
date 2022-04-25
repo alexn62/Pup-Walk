@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
-import MainButton from '../components/MainButton';
+import MainButton from '../components/Shared/MainButton';
 import { useAuth } from '../store/auth-context';
 import spinner from '../assets/icons/spinner.svg';
 import { useMutation } from '@apollo/client';

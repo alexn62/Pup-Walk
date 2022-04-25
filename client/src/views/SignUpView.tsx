@@ -1,4 +1,4 @@
-import SignUpForm from '../components/SignUpForm';
+import SignUpForm from '../components/Auth/SignUpForm';
 import bgimg from '../assets/images/corgi_lie.jpg';
 const SignUpView = () => {
   return (
