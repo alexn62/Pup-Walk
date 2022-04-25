@@ -44,6 +44,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     setLoading(true);
     const user = localStorage.getItem('user');
     if (user && user !== 'null') {
+      // console.log('Found user in localstorage', user);
       const parsedUser = JSON.parse(user);
       const getMongoUser = async (user: fUser): Promise<void> => {
         const mongoUser = await getUserByEmailAddress(user.email!);
@@ -56,18 +57,24 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       getMongoUser(parsedUser);
     } else {
       const unsubscribe = auth.onAuthStateChanged(async (user) => {
+        console.log('Auth state changed with user: ', user);
         setLoading(true);
         if (!user) {
           setCurrentUser(null);
           setCurrentMongoUser(null);
         } else {
-          const mongoUser = await getUserByEmailAddress(user.email!);
-          if (mongoUser) {
-            localStorage.setItem('user', JSON.stringify(user));
-            setCurrentUser(user);
-            setCurrentMongoUser(mongoUser);
-          } else {
-            setUserSigningUp(user);
+          try {
+            const mongoUser = await getUserByEmailAddress(user.email!);
+            console.log('Mongo user found: ', mongoUser);
+            if (mongoUser) {
+              localStorage.setItem('user', JSON.stringify(user));
+              setCurrentUser(user);
+              setCurrentMongoUser(mongoUser);
+            } else {
+              setUserSigningUp(user);
+            }
+          } catch (e) {
+            console.log(e);
           }
         }
         setLoading(false);

@@ -159,8 +159,12 @@ const res = {
       const jobs = [];
       if (user && user.jobs) {
         for (let jobId of user.jobs) {
-          const job = await res.Query.getJob(null, { id: jobId.toString() });
-          jobs.push(job);
+          try {
+            const job = await res.Query.getJob(null, { id: jobId.toString() });
+            jobs.push(job);
+          } catch (e) {
+            console.log(e);
+          }
         }
       }
       return jobs;

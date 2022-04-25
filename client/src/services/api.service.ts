@@ -9,7 +9,8 @@ export const getUserByEmailAddress = async (email: string) => {
   try {
     const response = await client.query({ query: userQueries.getUserByEmail, variables: { email: email } });
     return response.data.getUserByEmail;
-  } catch {
+  } catch (e) {
+    console.log(e);
     return null;
   }
 };

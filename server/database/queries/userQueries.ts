@@ -53,8 +53,10 @@ const applyForJob = async (
 const getUserByEmail = async (email: string): Promise<HydratedDocument<IUser> | null> => {
   try {
     const user = await User.findOne({ email: email });
+    console.log(user);
     return user;
-  } catch (_) {
+  } catch (e) {
+    console.log(e);
     return null;
   }
 };
