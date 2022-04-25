@@ -151,6 +151,10 @@ const res = {
       const response = await jobQueries.markJobAsFinished(new Types.ObjectId(jobId));
       return response;
     },
+    confirmJob: async (_: any, { jobId }: { jobId: string }) => {
+      const response = await jobQueries.confirmJob(new Types.ObjectId(jobId));
+      return response;
+    },
   },
 
   User: {

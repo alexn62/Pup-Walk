@@ -184,3 +184,44 @@ export const markJobAsFinished = gql`
     }
   }
 `;
+
+export const confirmJob = gql`
+  mutation confirmJob($jobId: ID!) {
+    confirmJob(jobId: $jobId) {
+      id
+      title
+      details
+      hourlyPay
+      duration
+      startTime
+      locality
+      city
+      status
+      acceptedUser {
+        id
+        firstName
+        lastName
+        profilePhoto
+      }
+      candidates {
+        id
+      }
+      jobLocation {
+        coordinates
+      }
+      user {
+        id
+        firstName
+        lastName
+        profilePhoto
+      }
+      dog {
+        id
+        name
+        breed
+        age
+        dogPhoto
+      }
+    }
+  }
+`;

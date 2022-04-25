@@ -95,5 +95,14 @@ const markJobAsFinished = async (jobId: Types.ObjectId): Promise<HydratedDocumen
     return null;
   }
 };
+const confirmJob = async (jobId: Types.ObjectId): Promise<HydratedDocument<IJob> | null | undefined> => {
+  const job = await getJob(jobId);
+  if (job) {
+    job.status = 'closed';
+    return await job.save();
+  } else {
+    return null;
+  }
+};
 
-export { addJob, getJob, deleteJob, getJobsCloseBy, addApplicant, acceptApplication, markJobAsFinished };
+export { addJob, getJob, deleteJob, getJobsCloseBy, addApplicant, acceptApplication, markJobAsFinished, confirmJob };

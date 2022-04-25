@@ -5,25 +5,30 @@ import { useEffect, useState } from 'react';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
 import * as jobQueries from '../services/queries/JobQueries';
 import { Job } from '../interfaces/interfaces';
+import MainButton from './MainButton';
 
 const MyListingsItem = ({ job }: { job: Job }) => {
   const [thisJob, setThisJob] = useState<Job>();
   const [showApplicants, setShowApplicants] = useState(false);
-  const [applyMutation, { data }] = useMutation(jobQueries.acceptApplication);
+  const [applyAcceptMutation, { data: acceptData }] = useMutation(jobQueries.acceptApplication);
   const handleAcceptApplication = async (applicantId: string, jobId: string) => {
-    console.log(applicantId, jobId);
-    const response = await applyMutation({ variables: { applicantId, jobId } });
-    console.log(response);
+    await applyAcceptMutation({ variables: { applicantId, jobId } });
+  };
+  const [applyConfirmMutation, { loading: confirmLoading, data: confirmData }] = useMutation(jobQueries.confirmJob);
+  const handleConfirmJob = async (jobId: string) => {
+    await applyConfirmMutation({ variables: { jobId } });
   };
   useEffect(() => {
     if (job) {
       setThisJob(job);
     }
-    if (data) {
-      console.log('data changed', data);
-      setThisJob(data.acceptApplication);
+    if (acceptData) {
+      setThisJob(acceptData.acceptApplication);
     }
-  }, [job, data]);
+    if (confirmData) {
+      setThisJob(confirmData.acceptApplication);
+    }
+  }, [job, acceptData, confirmData]);
   const startDate = new Date(+job.startTime);
   const startTime = startDate.toLocaleDateString('en-US', {
     day: '2-digit',
@@ -114,9 +119,9 @@ const MyListingsItem = ({ job }: { job: Job }) => {
             <p className="font-semibold">Status</p>
             <div
               className={`text-center rounded-md  px-12 ${
-                thisJob.status === 'open'
+                thisJob.status === 'open' || thisJob.status === 'closed'
                   ? 'bg-green-100 text-green-500'
-                  : thisJob.status === 'pending'
+                  : thisJob.status === 'finished' || thisJob.status === 'pending'
                   ? 'bg-orange-100  text-orange-500'
                   : 'bg-red-100  text-red-500'
               }`}
@@ -136,6 +141,23 @@ const MyListingsItem = ({ job }: { job: Job }) => {
               <HiOutlineClock color="#4971FF" />
             </div>
           </div>
+          {thisJob.status === 'finished' && (
+            <div className="flex space-x-2 w-full ">
+              <MainButton title="DISPUTE" invert={true} />
+              <MainButton
+                title="CONFIRM"
+                loading={confirmLoading && !confirmData}
+                disabled={confirmLoading && !confirmData}
+                onClick={
+                  thisJob.status === 'finished'
+                    ? () => {
+                        handleConfirmJob(thisJob.id);
+                      }
+                    : () => {}
+                }
+              ></MainButton>
+            </div>
+          )}
         </div>
       )}
     </>

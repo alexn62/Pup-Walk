@@ -24,6 +24,10 @@ const MyListings = () => {
     .filter((job) => job.status.toLowerCase() === 'pending')
     .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
 
+  const finishedJobs = myListings
+    .filter((job) => job.status.toLowerCase() === 'finished')
+    .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
+
   const openJobs = myListings
     .filter((job) => job.status.toLowerCase() === 'open' && Number(job.startTime) > Date.now())
     .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
@@ -42,6 +46,16 @@ const MyListings = () => {
         <TopBar title="My Listings"></TopBar>
         {myListings.length && (
           <div className="pt-8 pb-16 flex flex-col space-y-3 w-full">
+            {finishedJobs.length > 0 && (
+              <div>
+                <h3 className="font-bold text-center my-4">Marked as finished</h3>
+                <div className="flex flex-col space-y-3 w-full">
+                  {finishedJobs.map((job: Job) => (
+                    <MyListingsItem key={job.id} job={job}></MyListingsItem>
+                  ))}
+                </div>
+              </div>
+            )}
             {pendingJobs.length > 0 && (
               <div>
                 <h3 className="font-bold text-center my-4">Pending</h3>
