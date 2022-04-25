@@ -68,7 +68,9 @@ export const getJobsNearby = gql`
       startTime
       locality
       city
-      acceptedUser
+      acceptedUser {
+        id
+      }
       candidates {
         id
       }

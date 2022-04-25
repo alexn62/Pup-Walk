@@ -22,6 +22,39 @@ export const getUser = gql`
         dogPhoto
         age
       }
+      appliedTo {
+        user {
+          id
+          firstName
+          profilePhoto
+        }
+        id
+        title
+        details
+        hourlyPay
+        duration
+        city
+        locality
+        startTime
+        status
+        candidates {
+          id
+          firstName
+          lastName
+          profilePhoto
+        }
+        acceptedUser {
+          id
+          firstName
+          lastName
+          profilePhoto
+        }
+        dog {
+          name
+          breed
+          age
+        }
+      }
       jobs {
         id
         title

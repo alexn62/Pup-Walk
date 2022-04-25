@@ -9,7 +9,7 @@ import { Job } from '../interfaces/interfaces';
 const MyListingsItem = ({ job }: { job: Job }) => {
   const [thisJob, setThisJob] = useState<Job>();
   const [showApplicants, setShowApplicants] = useState(false);
-  const [applyMutation, { data, loading }] = useMutation(jobQueries.acceptApplication);
+  const [applyMutation, { data }] = useMutation(jobQueries.acceptApplication);
   const handleAcceptApplication = async (applicantId: string, jobId: string) => {
     console.log(applicantId, jobId);
     const response = await applyMutation({ variables: { applicantId, jobId } });

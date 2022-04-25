@@ -15,6 +15,7 @@ import SetupUser from './views/SetupUser';
 import Account from './views/Account';
 
 import AddDog from './views/AddDog';
+import FullScreenLoadingIndicator from './components/FullScreenLoadingIndicator';
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -67,7 +68,7 @@ const ProtectedRoute = ({ children }) => {
   const auth = useAuth();
   console.log(auth.currentUser?.email, auth.currentMongoUser?.firstName, auth.loading);
   if (auth.loading) {
-    return <div>Loading...</div>;
+    return <FullScreenLoadingIndicator />;
   }
   if (!auth.currentUser) {
     return <Navigate to="/login"></Navigate>;
