@@ -1,25 +1,23 @@
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import FullScreenLoadingIndicator from '../components/Shared/FullScreenLoadingIndicator';
-import MyListingsItem from '../components/MyListings/MyListingsItem';
 import TopBar from '../components/Shared/TopBar';
 import { Job, User } from '../interfaces/interfaces';
 import * as userQueries from '../services/queries/UserQueries';
 import { useAuth } from '../store/auth-context';
+import MyListingsSection from '../components/MyListings/MyListingsSection';
 
 const MyListings = () => {
+  // SERVICES
   const auth = useAuth();
+
+  // STATE VARIABLES
+  const [myListings, setMyListings] = useState<Job[]>([]);
   const { loading, data } = useQuery<{ getUser: User }>(userQueries.getUser, {
     variables: { getUserId: auth?.currentMongoUser?.id },
   });
-  const [myListings, setMyListings] = useState<Job[]>([]);
 
-  useEffect(() => {
-    if (data?.getUser.jobs) {
-      setMyListings(data.getUser.jobs);
-    }
-  }, [data]);
-
+  // FILTERS
   const pendingJobs = myListings
     .filter((job) => job.status.toLowerCase() === 'pending')
     .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
@@ -39,6 +37,13 @@ const MyListings = () => {
         (Number(job.startTime) < Date.now() && job.status.toLowerCase() !== 'pending')
     )
     .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
+
+  // USEEFFECT
+  useEffect(() => {
+    if (data?.getUser.jobs) {
+      setMyListings(data.getUser.jobs);
+    }
+  }, [data]);
   return (
     <>
       {loading && !data && <FullScreenLoadingIndicator></FullScreenLoadingIndicator>}
@@ -46,45 +51,11 @@ const MyListings = () => {
         <TopBar title="My Listings"></TopBar>
         {myListings.length && (
           <div className="pt-8 pb-16 flex flex-col space-y-3 w-full">
-            {finishedJobs.length > 0 && (
-              <div>
-                <h3 className="font-bold text-center my-4">Marked as finished</h3>
-                <div className="flex flex-col space-y-3 w-full">
-                  {finishedJobs.map((job: Job) => (
-                    <MyListingsItem key={job.id} job={job}></MyListingsItem>
-                  ))}
-                </div>
-              </div>
-            )}
-            {pendingJobs.length > 0 && (
-              <div>
-                <h3 className="font-bold text-center my-4">Pending</h3>
-                <div className="flex flex-col space-y-3 w-full">
-                  {pendingJobs.map((job: Job) => (
-                    <MyListingsItem key={job.id} job={job}></MyListingsItem>
-                  ))}
-                </div>
-              </div>
-            )}
-            {openJobs.length > 0 && (
-              <div>
-                <h3 className="font-bold text-left pl-4 my-2">Open</h3>
-                <div className="flex flex-col space-y-3 w-full">
-                  {openJobs.map((job: Job) => (
-                    <MyListingsItem key={job.id} job={job}></MyListingsItem>
-                  ))}
-                </div>
-              </div>
-            )}
+            {finishedJobs.length > 0 && <MyListingsSection title="Marked as Finished" jobs={finishedJobs} />}
+            {pendingJobs.length > 0 && <MyListingsSection title="Pending" jobs={pendingJobs} />}
+            {openJobs.length > 0 && <MyListingsSection title="Open Jobs" jobs={openJobs} />}
             {closedAndExpiredJobs.length > 0 && (
-              <div>
-                <h3 className="font-bold text-left pl-4 my-2">Closed or expired</h3>
-                <div className="flex flex-col space-y-3 w-full">
-                  {closedAndExpiredJobs.map((job: Job) => (
-                    <MyListingsItem key={job.id} job={job}></MyListingsItem>
-                  ))}
-                </div>
-              </div>
+              <MyListingsSection title="Closed and Expired" jobs={closedAndExpiredJobs} />
             )}
           </div>
         )}
