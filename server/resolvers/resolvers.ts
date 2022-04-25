@@ -224,8 +224,13 @@ const res = {
       }
       return users;
     },
-    acceptedUser: async (job: IJob): Promise<IUser> => {
-      return await res.Query.getUser(null, { id: job.acceptedUser.toString() });
+    acceptedUser: async (job: IJob): Promise<IUser | null> => {
+      if (!job.acceptedUser) {
+        return null;
+      }
+      const acceptedUser = await res.Query.getUser(null, { id: job.acceptedUser.toString() });
+      console.log('Accepted User: ', acceptedUser);
+      return acceptedUser;
     },
     city: async (job: IJob): Promise<string> => {
       try {

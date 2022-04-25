@@ -35,7 +35,7 @@ export interface Job {
   timePosted: Date;
   startTime: Date;
   status: string;
-  acceptedUser: User;
+  acceptedUser?: User;
   candidates: User[];
   city?: string;
   locality?: string;

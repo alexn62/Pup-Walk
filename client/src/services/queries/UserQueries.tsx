@@ -38,6 +38,12 @@ export const getUser = gql`
           lastName
           profilePhoto
         }
+        acceptedUser {
+          id
+          firstName
+          lastName
+          profilePhoto
+        }
         dog {
           name
           breed
