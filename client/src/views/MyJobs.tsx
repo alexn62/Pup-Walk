@@ -14,6 +14,7 @@ const MyJobs = () => {
   const [myListings, setMyListings] = useState<Job[]>([]);
 
   useEffect(() => {
+    console.log(data);
     if (data?.getUser.appliedTo) {
       setMyListings(data.getUser.appliedTo);
     }
@@ -28,7 +29,7 @@ const MyJobs = () => {
     .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
 
   const waitingForOwnerResponse = myListings
-    .filter((job) => !job.acceptedUser && job.status.toLowerCase() === 'pending')
+    .filter((job) => !job.acceptedUser && job.status.toLowerCase() === 'open')
     .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
 
   const waitingForConfirmation = myListings
@@ -51,7 +52,7 @@ const MyJobs = () => {
           <div className="pt-8 pb-16 flex flex-col space-y-3 w-full">
             {successfulJobs.length > 0 && (
               <div>
-                <h3 className="font-bold text-center my-4">Upcoming Jobs</h3>
+                <h3 className="font-bold text-left my-4">Upcoming Jobs</h3>
                 <div className="flex flex-col space-y-3 w-full">
                   {successfulJobs.map((job: Job) => (
                     <MyJobsItem key={job.id} job={job}></MyJobsItem>
@@ -61,7 +62,7 @@ const MyJobs = () => {
             )}
             {waitingForConfirmation.length > 0 && (
               <div>
-                <h3 className="font-bold text-center my-4">Finished and waiting for owner confirmation</h3>
+                <h3 className="font-bold text-left my-4">Finished and waiting for owner confirmation</h3>
                 <div className="flex flex-col space-y-3 w-full">
                   {waitingForConfirmation.map((job: Job) => (
                     <MyJobsItem key={job.id} job={job}></MyJobsItem>
@@ -71,7 +72,7 @@ const MyJobs = () => {
             )}
             {waitingForOwnerResponse.length > 0 && (
               <div>
-                <h3 className="font-bold text-center my-4">Applied to</h3>
+                <h3 className="font-bold text-left my-4">Applied to</h3>
                 <div className="flex flex-col space-y-3 w-full">
                   {waitingForOwnerResponse.map((job: Job) => (
                     <MyJobsItem key={job.id} job={job}></MyJobsItem>
@@ -81,7 +82,7 @@ const MyJobs = () => {
             )}
             {myFinishedJobs.length > 0 && (
               <div>
-                <h3 className="font-bold text-center my-4">Finished Jobs</h3>
+                <h3 className="font-bold text-left my-4">Finished Jobs</h3>
                 <div className="flex flex-col space-y-3 w-full">
                   {myFinishedJobs.map((job: Job) => (
                     <MyJobsItem key={job.id} job={job}></MyJobsItem>

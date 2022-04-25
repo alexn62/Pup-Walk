@@ -23,9 +23,14 @@ const NewJobs = () => {
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       setNewJobs(
         data.getJobsCloseBy.filter(
-          (job) => job.user.id !== auth?.currentMongoUser?.id && Number(job.startTime) > Date.now()
+          (job) =>
+            (job.status === 'open' ||
+              (job.status === 'pending' && job.acceptedUser?.id === auth?.currentMongoUser?.id)) &&
+            job.user.id !== auth?.currentMongoUser?.id &&
+            Number(job.startTime) > Date.now()
         )
       );
     }
@@ -96,10 +101,17 @@ const NewJobs = () => {
             <option value="closest">Closest</option>
           </select>
         </div>
-        <div className="flex flex-col space-y-3 w-full pb-16">
-          {newJobs &&
-            newJobs.map((job: Job) => <NewPostItem job={job} setJobs={setNewJobs} key={job.id}></NewPostItem>)}
-        </div>
+        {!newJobs.length && (
+          <div className="my-48 flex flex-col items-center justify-center">
+            <p className="text-center font-semibold">There are no new jobs in your area right now!</p>
+          </div>
+        )}
+        {newJobs.length > 0 && (
+          <div className="flex flex-col space-y-3 w-full pb-16">
+            {newJobs &&
+              newJobs.map((job: Job) => <NewPostItem job={job} setJobs={setNewJobs} key={job.id}></NewPostItem>)}
+          </div>
+        )}
       </div>
     </>
   );

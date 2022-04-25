@@ -113,7 +113,7 @@ const MyJobsItem = ({ job }: { job: Job }) => {
               <HiOutlineClock color="#4971FF" />
             </div>
           </div>
-          {thisJob.acceptedUser?.id !== auth?.currentMongoUser?.id && (
+          {thisJob.status === 'pending' && (
             <div className="flex space-x-2 w-full ">
               <MainButton title="CANCEL" invert={true} />
               {thisJob.acceptedUser?.id === auth?.currentMongoUser?.id && (
