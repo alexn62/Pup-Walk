@@ -43,7 +43,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   useEffect(() => {
     setLoading(true);
     const user = localStorage.getItem('user');
-    if (user && user !== 'null') {
+    if (user) {
       // console.log('Found user in localstorage', user);
       const parsedUser = JSON.parse(user);
       const getMongoUser = async (user: fUser): Promise<void> => {

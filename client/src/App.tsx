@@ -6,16 +6,14 @@ import SignUpView from './views/SignUpView';
 import LoginView from './views/LoginView';
 import AddJob from './views/AddJob';
 import { client } from './services/api.service';
-import { useAuth } from './store/auth-context';
 import NewJobs from './views/NewJobs';
 import MyJobs from './views/MyJobs';
 import MyListings from './views/MyListings';
 import Messages from './views/Messages';
 import SetupUser from './views/SetupUser';
 import Account from './views/Account';
-
 import AddDog from './views/AddDog';
-import FullScreenLoadingIndicator from './components/Shared/FullScreenLoadingIndicator';
+import ProtectedRoute from './components/Shared/ProtectedRoute';
 function App() {
   return (
     <ApolloProvider client={client}>
@@ -63,15 +61,3 @@ function App() {
 }
 
 export default App;
-
-const ProtectedRoute = ({ children }: { children: any }) => {
-  const auth = useAuth();
-  console.log(auth?.currentUser?.email, auth?.currentMongoUser?.firstName, auth?.loading);
-  if (auth?.loading) {
-    return <FullScreenLoadingIndicator />;
-  }
-  if (!auth?.currentUser) {
-    return <Navigate to="/login"></Navigate>;
-  }
-  return children;
-};

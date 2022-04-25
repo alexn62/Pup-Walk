@@ -46,19 +46,15 @@ const LoginForm = () => {
               placeholder="Password"
               className="w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none"
             ></input>
-            <div className="flex justify-end">
-              <p className="text-kBlue text-sm hover:underline hover:cursor-pointer mb-1">Forgot Password?</p>
-            </div>
+            <p className="text-kBlue text-sm hover:underline hover:cursor-pointer mb-1 text-right">Forgot Password?</p>
             <MainButton type="submit" title="LOGIN"></MainButton>
           </form>
         </div>
 
         <p className="text-kBlue text-sm mx-auto">or continue with...</p>
-        <div>
-          <div className="flex">
-            <button className="w-full bg-white rounded-md p-2 text-black text-sm mr-1">GOOGLE</button>
-            <button className="w-full bg-black rounded-md p-2 text-white text-sm ml-1">APPLE</button>
-          </div>
+        <div className="flex">
+          <button className="w-full bg-white rounded-md p-2 text-black text-sm mr-1">GOOGLE</button>
+          <button className="w-full bg-black rounded-md p-2 text-white text-sm ml-1">APPLE</button>
         </div>
       </div>
       <Link to="/signup" className="text-kBlue text-sm mt-2 hover:underline hover:cursor-pointer">

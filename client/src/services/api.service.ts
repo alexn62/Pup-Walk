@@ -7,7 +7,7 @@ export const client = new ApolloClient({
 
 export const getUserByEmailAddress = async (email: string) => {
   try {
-    const response = await client.query({ query: userQueries.getUserByEmail, variables: { email: email } });
+    const response = await client.query({ query: userQueries.getUserByEmail, variables: { email } });
     return response.data.getUserByEmail;
   } catch (e) {
     console.log(e);

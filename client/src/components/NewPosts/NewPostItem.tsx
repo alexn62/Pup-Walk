@@ -6,7 +6,8 @@ import { useAuth } from '../../store/auth-context';
 import MainButton from '../Shared/MainButton';
 import * as jobQueries from '../../services/queries/JobQueries';
 import { useEffect } from 'react';
-
+import userFallback from '../../assets/images/user.png';
+import dogFallback from '../../assets/images/dog.png';
 const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetStateAction<Job[]>) => void }) => {
   const auth = useAuth();
   const startDate = new Date(+job.startTime);
@@ -24,8 +25,8 @@ const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetSta
     stars.push(<FaStar key={i} color="orange" />);
   }
   const [applyMutation, { data, loading }] = useMutation(jobQueries.applyForJob);
-  const handleApply = async (applicantId: string, jobId: string) => {
-    await applyMutation({ variables: { applicantId, jobId } });
+  const handleApply = (applicantId: string, jobId: string) => {
+    applyMutation({ variables: { applicantId, jobId } });
   };
 
   useEffect(() => {
@@ -45,12 +46,10 @@ const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetSta
         <div className="flex justify-between">
           <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full mr-2 overflow-hidden">
             <img
-              src={
-                user.profilePhoto ??
-                'https://images.unsplash.com/photo-1564564244660-5d73c057f2d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1776&q=80'
-              }
+              src={user.profilePhoto === null ? userFallback : user.profilePhoto}
+              placeholder={userFallback}
               alt={user.firstName}
-              className="object-cover h-full"
+              className="object-cover"
             ></img>
           </div>
           <div className="flex flex-col justify-between items-start">
@@ -64,7 +63,7 @@ const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetSta
             <p className="text-sm">{`${dog.age} y/o, ${dog.breed}`}</p>
           </div>
           <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full ml-2 overflow-hidden">
-            <img src={dog.dogPhoto} alt="" className="object-cover h-full"></img>
+            <img src={dog.dogPhoto ?? dogFallback} alt="Dog" className="object-cover h-full"></img>
           </div>
         </div>
       </div>

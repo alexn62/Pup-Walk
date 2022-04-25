@@ -239,7 +239,6 @@ const res = {
         return null;
       }
       const acceptedUser = await res.Query.getUser(null, { id: job.acceptedUser.toString() });
-      console.log('Accepted User: ', acceptedUser);
       return acceptedUser;
     },
     city: async (job: IJob): Promise<string> => {

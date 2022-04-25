@@ -5,7 +5,8 @@ import { Job } from '../../interfaces/interfaces';
 import MainButton from '../Shared/MainButton';
 import * as jobQueries from '../../services/queries/JobQueries';
 import { useAuth } from '../../store/auth-context';
-
+import userFallback from '../../assets/images/user.png';
+import dogFallback from '../../assets/images/dog.png';
 const MyJobsItem = ({ job }: { job: Job }) => {
   const auth = useAuth();
 
@@ -16,13 +17,11 @@ const MyJobsItem = ({ job }: { job: Job }) => {
       setThisJob(job);
     }
     if (data) {
-      console.log('data changed', data);
       setThisJob(data.acceptApplication);
     }
   }, [job, data]);
   const handleMarkJobAsFinished = async (jobId: string) => {
-    const response = await applyMutation({ variables: { jobId } });
-    console.log(response);
+    await applyMutation({ variables: { jobId } });
   };
 
   useEffect(() => {
@@ -46,12 +45,10 @@ const MyJobsItem = ({ job }: { job: Job }) => {
             <div className="flex justify-between">
               <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full mr-2 overflow-hidden">
                 <img
-                  src={
-                    job.user.profilePhoto ??
-                    'https://images.unsplash.com/photo-1564564244660-5d73c057f2d2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1776&q=80'
-                  }
+                  src={job.user.profilePhoto !== null ? job.user.profilePhoto : userFallback}
+                  placeholder={userFallback}
                   alt={job.user.firstName}
-                  className="object-cover h-full"
+                  className="object-cover"
                 ></img>
               </div>
               <p className="font-semibold text-kBlue text-lg">{`${job.user.firstName}`}</p>
@@ -62,7 +59,12 @@ const MyJobsItem = ({ job }: { job: Job }) => {
                 <p className="text-sm">{`${job.dog.age} y/o, ${job.dog.breed}`}</p>
               </div>
               <div className="h-[48px] w-[48px] bg-kBlueLight rounded-full ml-2 overflow-hidden">
-                <img src={job.dog.dogPhoto} alt="" className="object-cover h-full"></img>
+                <img
+                  src={job.dog.dogPhoto ?? dogFallback}
+                  placeholder={dogFallback}
+                  alt="dog"
+                  className="object-cover"
+                ></img>
               </div>
             </div>
           </div>
@@ -82,7 +84,14 @@ const MyJobsItem = ({ job }: { job: Job }) => {
               <div key={thisJob.acceptedUser.firstName} className="flex font-semibold justify-between my-1">
                 <div className="flex justify-start space-x-2 items-center">
                   <div>{thisJob.acceptedUser.firstName}</div>
-                  <div className="w-6 h-6 rounded-full bg-kBlueLight"></div>
+                  <div className="h-5 w-5 bg-kBlueLight rounded-full ml-2 overflow-hidden">
+                    <img
+                      src={job.acceptedUser?.profilePhoto ?? userFallback}
+                      placeholder={userFallback}
+                      alt="Accepted User"
+                      className="object-cover "
+                    ></img>
+                  </div>
                 </div>
               </div>
             </div>
