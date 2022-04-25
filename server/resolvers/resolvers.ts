@@ -141,6 +141,10 @@ const res = {
       const response = await jobQueries.addApplicant(new Types.ObjectId(applicantId), new Types.ObjectId(jobId));
       return response;
     },
+
+    acceptApplication: async (_: any, { applicantId, jobId }: ApplyForJobInput) => {
+      return await jobQueries.acceptApplication(new Types.ObjectId(applicantId), new Types.ObjectId(jobId));
+    },
   },
 
   User: {
@@ -219,6 +223,9 @@ const res = {
         users.push(user);
       }
       return users;
+    },
+    acceptedUser: async (job: IJob): Promise<IUser> => {
+      return await res.Query.getUser(null, { id: job.acceptedUser.toString() });
     },
     city: async (job: IJob): Promise<string> => {
       try {

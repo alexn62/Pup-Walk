@@ -38,6 +38,8 @@ const typedefinitions = gql`
     deleteJob(userId: ID!, jobId: ID!): ID
 
     applyForJob(applicantId: ID!, jobId: ID!): Job
+
+    acceptApplication(applicantId: ID!, jobId: ID!): Job
   }
 
   type User {
@@ -80,6 +82,7 @@ const typedefinitions = gql`
     startTime: String!
     status: String!
     candidates: [User]
+    acceptedUser: User
     city: String
     locality: String
   }
