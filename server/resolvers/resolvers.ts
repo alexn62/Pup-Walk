@@ -256,13 +256,17 @@ const res = {
       }
     },
     locality: async (job: IJob): Promise<string> => {
-      const response = await axios.get(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${job.jobLocation.coordinates[1]}&longitude=${job.jobLocation.coordinates[0]}&localityLanguage=en`
-      );
-      const locality = response.data.locality;
-      const country = response.data.countryName;
+      try {
+        const response = await axios.get(
+          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${job.jobLocation.coordinates[1]}&longitude=${job.jobLocation.coordinates[0]}&localityLanguage=en`
+        );
+        const locality = response.data.locality;
+        const country = response.data.countryName;
 
-      return locality === '' ? country : locality;
+        return locality === '' ? country : locality;
+      } catch (e) {
+        return '';
+      }
     },
   },
 };

@@ -20,7 +20,7 @@ const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetSta
   const user = job.user;
   const dog = job.dog;
   let stars = [];
-  for (let i = 0; i < Math.floor(3); i++) {
+  for (let i = 0; i < 3; i++) {
     stars.push(<FaStar key={i} color="orange" />);
   }
   const [applyMutation, { data, loading }] = useMutation(jobQueries.applyForJob);
@@ -38,6 +38,7 @@ const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetSta
       });
     }
   }, [auth?.currentMongoUser, auth?.currentMongoUser?.id, data, job.id, setJobs]);
+
   return (
     <div className="shadow-lg rounded-2xl bg-white flex flex-col justify-between  p-4 space-y-3">
       <div className="flex justify-between">

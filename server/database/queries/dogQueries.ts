@@ -12,18 +12,22 @@ const addDog = async (
   description: string,
   dateAdded?: Date
 ): Promise<HydratedDocument<IDog> | null> => {
-  const dog = new Dog({
-    owner: owner,
-    name: name,
-    age: age,
-    sex: sex,
-    dateAdded: dateAdded,
-    breed: breed,
-    description: description,
-  });
-  const response = await dog.save();
-  await addDogToUser(owner, response._id);
-  return response;
+  try {
+    const dog = new Dog({
+      owner: owner,
+      name: name,
+      age: age,
+      sex: sex,
+      dateAdded: dateAdded,
+      breed: breed,
+      description: description,
+    });
+    const response = await dog.save();
+    await addDogToUser(owner, response._id);
+    return response;
+  } catch (e) {
+    return null;
+  }
 };
 
 const getDog = async (id: Types.ObjectId): Promise<HydratedDocument<IDog> | null> => {

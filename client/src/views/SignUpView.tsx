@@ -1,5 +1,5 @@
 import SignUpForm from '../components/SignUpForm';
-
+import bgimg from '../assets/images/corgi_lie.jpg';
 const SignUpView = () => {
   return (
     <div className="h-screen overflow-hidden relative">
@@ -7,11 +7,7 @@ const SignUpView = () => {
         <SignUpForm />
       </div>
       <div className="inline-block overflow-hidden">
-        <img
-          src={require('../assets/images/corgi_lie.jpg')}
-          alt="bg-lie"
-          className="h-screen w-screen object-cover"
-        ></img>
+        <img src={bgimg} alt="bg-lie" className="h-screen w-screen object-cover"></img>
       </div>
     </div>
   );

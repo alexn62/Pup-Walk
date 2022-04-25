@@ -4,6 +4,7 @@ import { useAuth } from '../store/auth-context';
 import spinner from '../assets/icons/spinner.svg';
 import { useMutation } from '@apollo/client';
 import * as userQueries from '../services/queries/UserQueries';
+import { useNavigate } from 'react-router-dom';
 type SetupUserInputs = {
   firstName: string;
   middleName?: string;
@@ -12,6 +13,7 @@ type SetupUserInputs = {
 };
 const SetupUser = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [addUser, { loading, data, error }] = useMutation(userQueries.addUser);
 
   const {
@@ -27,6 +29,7 @@ const SetupUser = () => {
         variables: variables,
       });
       auth?.setCurrentMongoUser(response.data?.addUser);
+      navigate('/home/newJobs');
     } catch {
       return;
     }

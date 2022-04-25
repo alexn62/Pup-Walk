@@ -2,8 +2,8 @@ import { useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as dogQueries from '../services/queries/DogQueries';
 import { useAuth } from '../store/auth-context';
-import spinner from '../assets/icons/spinner.svg';
 import MainButton from '../components/MainButton';
+import { useNavigate } from 'react-router-dom';
 
 type AddDogInputs = {
   name: string;
@@ -14,6 +14,7 @@ type AddDogInputs = {
 };
 const AddDog = () => {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [addDog, { loading, data, error }] = useMutation(dogQueries.addDog);
 
   const {
@@ -32,6 +33,7 @@ const AddDog = () => {
           return { ...prev, dogs: prev.dogs ? [...prev.dogs, response.data.addDog] : [response.data.addDog] };
         }
       });
+      navigate('/addJob');
     } catch {
       return;
     }
@@ -88,11 +90,7 @@ const AddDog = () => {
               <option value="male">Male</option>
             </select>
             <div className="pt-4 w-full flex justify-center">
-              {loading && !data ? (
-                <img src={spinner} alt="spinner"></img>
-              ) : (
-                <MainButton type="submit" title="Submit"></MainButton>
-              )}
+              <MainButton loading={loading && !data} type="submit" title="Submit"></MainButton>
             </div>
           </form>
         </div>

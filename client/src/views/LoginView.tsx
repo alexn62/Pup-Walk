@@ -1,5 +1,5 @@
 import LoginForm from '../components/LoginForm';
-
+import bgimg from '../assets/images/corgi_sit.jpg';
 const LoginView = () => {
   return (
     <div className="h-screen overflow-hidden relative">
@@ -7,11 +7,7 @@ const LoginView = () => {
         <LoginForm />
       </div>
       <div className="inline-block overflow-hidden">
-        <img
-          src={require('../assets/images/corgi_sit.jpg')}
-          alt="bg-sit"
-          className="h-screen w-screen object-cover"
-        ></img>
+        <img src={bgimg} alt="bg-sit" className="h-screen w-screen object-cover"></img>
       </div>
     </div>
   );
