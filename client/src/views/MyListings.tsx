@@ -54,7 +54,7 @@ const MyListings = () => {
             )}
             {openJobs.length > 0 && (
               <div>
-                <h3 className="font-bold text-center my-4">Open</h3>
+                <h3 className="font-bold text-left pl-4 my-2">Open</h3>
                 <div className="flex flex-col space-y-3 w-full">
                   {openJobs.map((job: Job) => (
                     <MyListingsItem key={job.id} job={job}></MyListingsItem>
@@ -64,7 +64,7 @@ const MyListings = () => {
             )}
             {closedAndExpiredJobs.length > 0 && (
               <div>
-                <h3 className="font-bold text-center my-4">Closed or expired</h3>
+                <h3 className="font-bold text-left pl-4 my-2">Closed or expired</h3>
                 <div className="flex flex-col space-y-3 w-full">
                   {closedAndExpiredJobs.map((job: Job) => (
                     <MyListingsItem key={job.id} job={job}></MyListingsItem>

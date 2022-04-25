@@ -30,10 +30,12 @@ const NewPostItem = ({ job, setJobs }: { job: Job; setJobs: (value: React.SetSta
 
   useEffect(() => {
     if (data?.applyForJob?.candidates.map((user: User) => user.id).includes(auth?.currentMongoUser?.id)) {
-      console.log('includes me');
-      setJobs((prev) =>
-        [...prev].map((j) => (j.id === job.id ? { ...j, candidates: [...j.candidates, auth?.currentMongoUser!] } : j))
-      );
+      setJobs((prev) => {
+        const relevantJob = { ...[...prev].filter((j) => j.id === job.id)[0] };
+        relevantJob.candidates = [...relevantJob.candidates, auth?.currentMongoUser!];
+        const newJobs = [...prev].map((j) => (j.id !== job.id ? j : relevantJob));
+        return newJobs;
+      });
     }
   }, [auth?.currentMongoUser, auth?.currentMongoUser?.id, data, job.id, setJobs]);
   return (

@@ -27,7 +27,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   const signUp = async (email: string, password: string) => {
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     setUserSigningUp(userCredential.user);
-    console.log(userCredential);
   };
 
   const signIn = async (email: string, password: string) => {
@@ -48,7 +47,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       const parsedUser = JSON.parse(user);
       const getMongoUser = async (user: fUser): Promise<void> => {
         const mongoUser = await getUserByEmailAddress(user.email!);
-        console.log('mongouser found: ', mongoUser);
         if (mongoUser) {
           setCurrentUser(parsedUser);
           setCurrentMongoUser(mongoUser);
@@ -59,15 +57,11 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     } else {
       const unsubscribe = auth.onAuthStateChanged(async (user) => {
         setLoading(true);
-
-        console.log('Auth State changed with user: ', user);
         if (!user) {
           setCurrentUser(null);
           setCurrentMongoUser(null);
         } else {
-          console.log('getting muser by email');
           const mongoUser = await getUserByEmailAddress(user.email!);
-          console.log(mongoUser);
           if (mongoUser) {
             localStorage.setItem('user', JSON.stringify(user));
             setCurrentUser(user);

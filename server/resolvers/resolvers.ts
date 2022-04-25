@@ -217,18 +217,15 @@ const res = {
       return users;
     },
     city: async (job: IJob): Promise<string> => {
-      console.log('getting city');
       try {
         const response = await axios.get(
           `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${job.jobLocation.coordinates[1]}&longitude=${job.jobLocation.coordinates[0]}&localityLanguage=en`
         );
         const city = response.data.city;
-        console.log(city);
         const region = response.data.principalSubdivision;
 
         return city === '' ? (region === '' ? response.data.countryName : region) : city;
       } catch (e) {
-        console.log(e);
         return '';
       }
     },

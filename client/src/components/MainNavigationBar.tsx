@@ -1,7 +1,5 @@
 import { faDog, faEnvelope, faList, faShoePrints } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
 import { Link } from 'react-router-dom';
-// import MainButton from './MainButton';
 import NavigationBarItem from './NavigationBarItem';
 
 const MainNavigationBar = () => {

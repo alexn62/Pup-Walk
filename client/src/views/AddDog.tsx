@@ -23,12 +23,10 @@ const AddDog = () => {
   } = useForm<AddDogInputs>();
   const onSubmit: SubmitHandler<AddDogInputs> = async (data) => {
     const variables = { ...data, owner: auth?.currentMongoUser?.id, age: +data.age };
-    console.log(variables);
     try {
       const response = await addDog({
         variables: variables,
       });
-      console.log(response);
       auth?.setCurrentMongoUser((prev) => {
         if (prev) {
           return { ...prev, dogs: prev.dogs ? [...prev.dogs, response.data.addDog] : [response.data.addDog] };

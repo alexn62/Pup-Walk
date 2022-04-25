@@ -127,7 +127,6 @@ const AddJob = () => {
     const variables = getVariables(data);
 
     const response = await addNewJob({ variables: variables });
-    console.log(response);
   };
 
   // mutation

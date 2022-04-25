@@ -28,7 +28,6 @@ const SignUpForm = () => {
   const authContext = useAuth();
 
   const onSubmit: SubmitHandler<SignUpInputs> = async (data) => {
-    console.log({ data });
     await authContext?.signUp(data.email, data.password);
     navigate('/setupUser');
   };

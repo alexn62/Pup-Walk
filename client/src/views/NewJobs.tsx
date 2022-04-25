@@ -22,7 +22,6 @@ const NewJobs = () => {
   const [newJobs, setNewJobs] = useState<Job[]>([]);
 
   useEffect(() => {
-    console.log(data);
     if (data) {
       setNewJobs(
         data.getJobsCloseBy.filter(
