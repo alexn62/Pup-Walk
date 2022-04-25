@@ -76,9 +76,7 @@ const acceptApplication = async (
   applicantId: Types.ObjectId,
   jobId: Types.ObjectId
 ): Promise<HydratedDocument<IJob> | null | undefined> => {
-  console.log('called');
   const job = await getJob(jobId);
-  console.log(job);
   if (job) {
     job.status = 'pending';
     job.acceptedUser = applicantId;
@@ -88,4 +86,14 @@ const acceptApplication = async (
   }
 };
 
-export { addJob, getJob, deleteJob, getJobsCloseBy, addApplicant, acceptApplication };
+const markJobAsFinished = async (jobId: Types.ObjectId): Promise<HydratedDocument<IJob> | null | undefined> => {
+  const job = await getJob(jobId);
+  if (job) {
+    job.status = 'finished';
+    return await job.save();
+  } else {
+    return null;
+  }
+};
+
+export { addJob, getJob, deleteJob, getJobsCloseBy, addApplicant, acceptApplication, markJobAsFinished };

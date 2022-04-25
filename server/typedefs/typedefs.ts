@@ -40,6 +40,8 @@ const typedefinitions = gql`
     applyForJob(applicantId: ID!, jobId: ID!): Job
 
     acceptApplication(applicantId: ID!, jobId: ID!): Job
+
+    markJobAsFinished(jobId: ID!): Job
   }
 
   type User {

@@ -144,3 +144,43 @@ export const acceptApplication = gql`
     }
   }
 `;
+export const markJobAsFinished = gql`
+  mutation markJobAsFinished($jobId: ID!) {
+    markJobAsFinished(jobId: $jobId) {
+      id
+      title
+      details
+      hourlyPay
+      duration
+      startTime
+      locality
+      city
+      status
+      acceptedUser {
+        id
+        firstName
+        lastName
+        profilePhoto
+      }
+      candidates {
+        id
+      }
+      jobLocation {
+        coordinates
+      }
+      user {
+        id
+        firstName
+        lastName
+        profilePhoto
+      }
+      dog {
+        id
+        name
+        breed
+        age
+        dogPhoto
+      }
+    }
+  }
+`;

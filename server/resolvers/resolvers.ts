@@ -143,9 +143,12 @@ const res = {
     },
 
     acceptApplication: async (_: any, { applicantId, jobId }: ApplyForJobInput) => {
-      console.log('called');
       const response = await jobQueries.acceptApplication(new Types.ObjectId(applicantId), new Types.ObjectId(jobId));
-      console.log('Accepted applicant response:', response);
+      return response;
+    },
+
+    markJobAsFinished: async (_: any, { jobId }: { jobId: string }) => {
+      const response = await jobQueries.markJobAsFinished(new Types.ObjectId(jobId));
       return response;
     },
   },

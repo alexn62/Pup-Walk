@@ -1,10 +1,29 @@
+import { useMutation } from '@apollo/client';
 import { useEffect, useState } from 'react';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
 import { Job } from '../interfaces/interfaces';
 import MainButton from './MainButton';
+import * as jobQueries from '../services/queries/JobQueries';
+import { useAuth } from '../store/auth-context';
 
 const MyJobsItem = ({ job }: { job: Job }) => {
+  const auth = useAuth();
+
   const [thisJob, setThisJob] = useState<Job>();
+  const [applyMutation, { loading, data }] = useMutation(jobQueries.markJobAsFinished);
+  useEffect(() => {
+    if (job) {
+      setThisJob(job);
+    }
+    if (data) {
+      console.log('data changed', data);
+      setThisJob(data.acceptApplication);
+    }
+  }, [job, data]);
+  const handleMarkJobAsFinished = async (jobId: string) => {
+    const response = await applyMutation({ variables: { jobId } });
+    console.log(response);
+  };
 
   useEffect(() => {
     if (job) {
@@ -68,7 +87,6 @@ const MyJobsItem = ({ job }: { job: Job }) => {
               </div>
             </div>
           )}
-
           <div className="flex justify-between items-center">
             <p className="font-semibold">Status</p>
             <div
@@ -95,16 +113,25 @@ const MyJobsItem = ({ job }: { job: Job }) => {
               <HiOutlineClock color="#4971FF" />
             </div>
           </div>
-          <div className="flex space-x-2 w-full ">
-            <MainButton title="CANCEL" invert={true} />
-
-            <MainButton
-              title="FINISH"
-              // loading={loading && !data}
-              // disabled={loading && !data}
-              onClick={() => {}}
-            />
-          </div>
+          {thisJob.acceptedUser?.id !== auth?.currentMongoUser?.id && (
+            <div className="flex space-x-2 w-full ">
+              <MainButton title="CANCEL" invert={true} />
+              {thisJob.acceptedUser?.id === auth?.currentMongoUser?.id && (
+                <MainButton
+                  title="FINISH"
+                  loading={loading && !data}
+                  disabled={loading && !data}
+                  onClick={
+                    thisJob.status === 'pending'
+                      ? () => {
+                          handleMarkJobAsFinished(thisJob.id);
+                        }
+                      : () => {}
+                  }
+                />
+              )}
+            </div>
+          )}
         </div>
       )}
     </>

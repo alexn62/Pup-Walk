@@ -31,6 +31,10 @@ const MyJobs = () => {
     .filter((job) => !job.acceptedUser && job.status.toLowerCase() === 'pending')
     .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
 
+  const waitingForConfirmation = myListings
+    .filter((job) => job.acceptedUser && job.status.toLowerCase() === 'finished')
+    .sort((prev, curr) => Number(prev.startTime) - Number(curr.startTime));
+
   const closedAndExpiredJobs = myListings
     .filter(
       (job) =>
@@ -50,6 +54,16 @@ const MyJobs = () => {
                 <h3 className="font-bold text-center my-4">Upcoming Jobs</h3>
                 <div className="flex flex-col space-y-3 w-full">
                   {successfulJobs.map((job: Job) => (
+                    <MyJobsItem key={job.id} job={job}></MyJobsItem>
+                  ))}
+                </div>
+              </div>
+            )}
+            {waitingForConfirmation.length > 0 && (
+              <div>
+                <h3 className="font-bold text-center my-4">Finished and waiting for owner confirmation</h3>
+                <div className="flex flex-col space-y-3 w-full">
+                  {waitingForConfirmation.map((job: Job) => (
                     <MyJobsItem key={job.id} job={job}></MyJobsItem>
                   ))}
                 </div>
