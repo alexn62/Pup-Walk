@@ -1,32 +1,29 @@
+import { useMutation } from '@apollo/client';
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
+import * as jobQueries from '../services/queries/JobQueries';
 import { Job } from '../interfaces/interfaces';
-
-// const applicants = [
-//   { firstName: 'Alex' },
-//   { firstName: 'Mich' },
-//   { firstName: 'Franks' },
-//   { firstName: 'Al;lkex' },
-//   { firstName: 'Mil;kch' },
-//   // { firstName: 'Frjjanks' },
-//   // { firstName: 'Alejx' },
-//   // { firstName: 'Micjljh' },
-//   // { firstName: 'Frakjnnks' },
-//   // { firstName: 'Ankllex' },
-//   // { firstName: 'Mlknich' },
-//   { firstName: 'Fr anks' },
-// ];
 
 const MyListingsItem = ({ job }: { job: Job }) => {
   const [thisJob, setThisJob] = useState<Job>();
   const [showApplicants, setShowApplicants] = useState(false);
+  const [applyMutation, { data, loading }] = useMutation(jobQueries.acceptApplication);
+  const handleAcceptApplication = async (applicantId: string, jobId: string) => {
+    console.log(applicantId, jobId);
+    const response = await applyMutation({ variables: { applicantId, jobId } });
+    console.log(response);
+  };
   useEffect(() => {
     if (job) {
       setThisJob(job);
     }
-  }, [job]);
+    if (data) {
+      console.log('data changed', data);
+      setThisJob(data.acceptApplication);
+    }
+  }, [job, data]);
   const startDate = new Date(+job.startTime);
   const startTime = startDate.toLocaleDateString('en-US', {
     day: '2-digit',
@@ -52,48 +49,66 @@ const MyListingsItem = ({ job }: { job: Job }) => {
             <p className="font-semibold">Start time</p>
             <p>{startTime}</p>
           </div>
-          <div className="flex justify-between space-x-2">
-            <p className="font-semibold mr-auto">Applicants</p>
-            <p>{thisJob.candidates.length}</p>
-            <button
-              onClick={() => {
-                setShowApplicants((prev) => !prev);
-              }}
-              className={`text-kBlue px-2 border border-kBlue bg-white rounded-md transition-all disabled:text-gray-400 disabled:border-gray-400`}
-              disabled={thisJob.candidates.length === 0}
-            >
-              {showApplicants ? 'Hide' : 'Show'}
-            </button>
-          </div>
-
-          <div
-            className={`relative  overflow-scroll px-3 flex flex-col  rounded-md transition-all duration-200 ${
-              showApplicants ? 'max-h-48' : 'max-h-0'
-            }`}
-          >
-            <div className="w-full bg-gradient-to-b from-white to-transparent min-h-[12px] sticky top-0 left-0"></div>
-            {thisJob.candidates.map((applicant) => (
-              <div key={applicant.firstName} className="flex font-semibold justify-between my-1">
+          {thisJob.acceptedUser && (
+            <div className="flex justify-between">
+              <p className="font-semibold">Accepted walker</p>
+              <div key={thisJob.acceptedUser.firstName} className="flex font-semibold justify-between my-1">
                 <div className="flex justify-start space-x-2 items-center">
+                  <div>{thisJob.acceptedUser.firstName}</div>
                   <div className="w-6 h-6 rounded-full bg-kBlueLight"></div>
-                  <div>{applicant.firstName}</div>
-                </div>
-                <div className="flex justify-end space-x-2">
-                  <FontAwesomeIcon
-                    className="px-3 py-1 bg-red-500 rounded-md"
-                    color="white"
-                    icon={faXmark}
-                  ></FontAwesomeIcon>
-                  <FontAwesomeIcon
-                    className="px-6 py-1 bg-green-500 rounded-md"
-                    color="white"
-                    icon={faCheck}
-                  ></FontAwesomeIcon>
                 </div>
               </div>
-            ))}
-            <div className="w-full bg-gradient-to-b from-transparent to-white min-h-[12px] sticky bottom-0 left-0"></div>
-          </div>
+            </div>
+          )}
+          {!thisJob.acceptedUser && (
+            <>
+              <div className="flex justify-between space-x-2">
+                <p className="font-semibold mr-auto">Applicants</p>
+                <p>{thisJob.candidates.length}</p>
+                <button
+                  onClick={() => {
+                    setShowApplicants((prev) => !prev);
+                  }}
+                  className={`text-kBlue px-2 border border-kBlue bg-white rounded-md transition-all disabled:text-gray-400 disabled:border-gray-400`}
+                  disabled={thisJob.candidates.length === 0}
+                >
+                  {showApplicants ? 'Hide' : 'Show'}
+                </button>
+              </div>
+
+              <div
+                className={`relative  overflow-scroll px-3 flex flex-col  rounded-md transition-all duration-200 ${
+                  showApplicants ? 'max-h-48' : 'max-h-0'
+                }`}
+              >
+                <div className="w-full bg-gradient-to-b from-white to-transparent min-h-[12px] sticky top-0 left-0"></div>
+                {thisJob.candidates.map((applicant) => (
+                  <div key={applicant.firstName} className="flex font-semibold justify-between my-1">
+                    <div className="flex justify-start space-x-2 items-center">
+                      <div className="w-6 h-6 rounded-full bg-kBlueLight"></div>
+                      <div>{applicant.firstName}</div>
+                    </div>
+                    <div className="flex justify-end space-x-2">
+                      <FontAwesomeIcon
+                        className="px-3 py-1 bg-red-500 rounded-md"
+                        color="white"
+                        icon={faXmark}
+                      ></FontAwesomeIcon>
+                      <FontAwesomeIcon
+                        onClick={() => {
+                          handleAcceptApplication(applicant.id, thisJob.id);
+                        }}
+                        className="px-6 py-1 bg-green-500 rounded-md"
+                        color="white"
+                        icon={faCheck}
+                      ></FontAwesomeIcon>
+                    </div>
+                  </div>
+                ))}
+                <div className="w-full bg-gradient-to-b from-transparent to-white min-h-[12px] sticky bottom-0 left-0"></div>
+              </div>
+            </>
+          )}
 
           <div className="flex justify-between items-center">
             <p className="font-semibold">Status</p>

@@ -68,6 +68,7 @@ export const getJobsNearby = gql`
       startTime
       locality
       city
+      acceptedUser
       candidates {
         id
       }
@@ -96,6 +97,47 @@ export const applyForJob = gql`
     applyForJob(applicantId: $applicantId, jobId: $jobId) {
       candidates {
         id
+      }
+    }
+  }
+`;
+
+export const acceptApplication = gql`
+  mutation acceptApplication($applicantId: ID!, $jobId: ID!) {
+    acceptApplication(applicantId: $applicantId, jobId: $jobId) {
+      id
+      title
+      details
+      hourlyPay
+      duration
+      startTime
+      locality
+      city
+      status
+      acceptedUser {
+        id
+        firstName
+        lastName
+        profilePhoto
+      }
+      candidates {
+        id
+      }
+      jobLocation {
+        coordinates
+      }
+      user {
+        id
+        firstName
+        lastName
+        profilePhoto
+      }
+      dog {
+        id
+        name
+        breed
+        age
+        dogPhoto
       }
     }
   }

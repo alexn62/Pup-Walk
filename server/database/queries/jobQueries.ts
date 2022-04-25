@@ -76,6 +76,7 @@ const acceptApplication = async (
   applicantId: Types.ObjectId,
   jobId: Types.ObjectId
 ): Promise<HydratedDocument<IJob> | null | undefined> => {
+  console.log('called');
   const job = await getJob(jobId);
   console.log(job);
   if (job) {
