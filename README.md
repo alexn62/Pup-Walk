@@ -10,6 +10,12 @@ Through PupWalk, busy dog owners meet motivated dog lovers that offer their dog 
 
 Not only does PupWalk function as platform for dog owners to meet dog walkers, but PupWalk aspires to provide this exchange of services in an ethical manner. Dog owners should not be allowed pay an hourly rate below minimum wage. On top of that, the entire payout will flow to the walkers in its entirety.
 
+<img src="readme-images/login.png" width="200" />
+<img src="readme-images/new_jobs.png" width="200" />
+<img src="readme-images/my_jobs.png" width="200" />
+<img src="readme-images/my_listings.png" width="200" />
+<img src="readme-images/add_dog.png" width="200" />
+
 ## Run it on your machine
 
 1. Fork the [PupWalk respository](https://github.com/alexn62/Dog-Walking-App)
