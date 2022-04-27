@@ -7,11 +7,6 @@ const addUser = async (email: string, firstName: string, lastName: string, middl
   return response;
 };
 
-// const getAllUsers = async () => {
-//   const response = await User.find();
-//   return response;
-// };
-
 const getUser = async (id: Types.ObjectId): Promise<HydratedDocument<IUser> | null> => {
   const response = await User.findOne({ _id: id }).exec();
   return response;

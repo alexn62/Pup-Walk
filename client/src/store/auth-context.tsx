@@ -30,14 +30,11 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   };
 
   const signIn = async (email: string, password: string, cb: VoidFunction) => {
-    console.log('SignIn called in AuthContext');
     await auth.signInWithEmailAndPassword(email, password);
-    console.log('Calling cb() in AuthContext');
     cb();
   };
 
   const logout = async () => {
-    console.log('logout called in AuthContext');
     await auth.signOut();
     localStorage.removeItem('user');
     setCurrentMongoUser(null);
@@ -46,23 +43,8 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     setLoading(true);
-    // const user = localStorage.getItem('user');
-    // console.log('User in localstorage ', user);
-    // if (user) {
-    //   // console.log('Found user in localstorage', user);
-    //   const parsedUser = JSON.parse(user);
-    //   const getMongoUser = async (user: fUser): Promise<void> => {
-    //     const mongoUser = await getUserByEmailAddress(user.email!);
-    //     if (mongoUser) {
-    //       setCurrentUser(parsedUser);
-    //       setCurrentMongoUser(mongoUser);
-    //     }
-    //     setLoading(false);
-    //   };
-    //   getMongoUser(parsedUser);
-    // } else {
+
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      console.log('Auth state changed with user: ', user);
       setLoading(true);
       if (!user) {
         setCurrentUser(null);
@@ -71,9 +53,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       } else {
         try {
           const lsUser = localStorage.getItem('user');
-          console.log('User in localstorage ', user);
           if (lsUser) {
-            // console.log('Found user in localstorage', user);
             const parsedUser = JSON.parse(lsUser);
             const getMongoUser = async (user: fUser): Promise<void> => {
               const lsMongoUser = await getUserByEmailAddress(user.email!);
@@ -86,7 +66,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
             getMongoUser(parsedUser);
           }
           const mongoUser = await getUserByEmailAddress(user.email!);
-          console.log('Mongo user found: ', mongoUser);
           if (mongoUser) {
             localStorage.setItem('user', JSON.stringify(user));
             setCurrentUser(user);
@@ -94,14 +73,13 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
           } else {
             setUserSigningUp(user);
           }
-        } catch (e) {
-          console.log(e);
+        } catch {
+          return;
         }
       }
       setLoading(false);
     });
     return unsubscribe;
-    // }
   }, []);
 
   const value: AuthContextType = {

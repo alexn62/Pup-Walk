@@ -16,10 +16,8 @@ const LoginForm = () => {
   const authContext = useAuth();
   const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
     try {
-      console.log('Called onSubmit() in LoginForm');
       setError('');
       await authContext?.signIn(data.email, data.password, () => navigate('/home/newJobs'));
-      console.log('SignIn resolved in LoginForm');
     } catch (e) {
       setError('Unable to login!');
     }
