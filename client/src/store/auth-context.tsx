@@ -10,7 +10,7 @@ interface AuthContextType {
   setCurrentMongoUser: Dispatch<SetStateAction<User | null | undefined>>;
   userSigningUp: fUser | null | undefined;
   signUp: (email: string, password: string) => Promise<void>;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, cb: VoidFunction) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
 }
@@ -29,11 +29,15 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
     setUserSigningUp(userCredential.user);
   };
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, cb: VoidFunction) => {
+    console.log('SignIn called in AuthContext');
     await auth.signInWithEmailAndPassword(email, password);
+    console.log('Calling cb() in AuthContext');
+    cb();
   };
 
   const logout = async () => {
+    console.log('logout called in AuthContext');
     await auth.signOut();
     localStorage.removeItem('user');
     setCurrentMongoUser(null);
@@ -42,45 +46,62 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     setLoading(true);
-    const user = localStorage.getItem('user');
-    if (user) {
-      // console.log('Found user in localstorage', user);
-      const parsedUser = JSON.parse(user);
-      const getMongoUser = async (user: fUser): Promise<void> => {
-        const mongoUser = await getUserByEmailAddress(user.email!);
-        if (mongoUser) {
-          setCurrentUser(parsedUser);
-          setCurrentMongoUser(mongoUser);
-        }
-        setLoading(false);
-      };
-      getMongoUser(parsedUser);
-    } else {
-      const unsubscribe = auth.onAuthStateChanged(async (user) => {
-        console.log('Auth state changed with user: ', user);
-        setLoading(true);
-        if (!user) {
-          setCurrentUser(null);
-          setCurrentMongoUser(null);
-        } else {
-          try {
-            const mongoUser = await getUserByEmailAddress(user.email!);
-            console.log('Mongo user found: ', mongoUser);
-            if (mongoUser) {
-              localStorage.setItem('user', JSON.stringify(user));
-              setCurrentUser(user);
-              setCurrentMongoUser(mongoUser);
-            } else {
-              setUserSigningUp(user);
-            }
-          } catch (e) {
-            console.log(e);
+    // const user = localStorage.getItem('user');
+    // console.log('User in localstorage ', user);
+    // if (user) {
+    //   // console.log('Found user in localstorage', user);
+    //   const parsedUser = JSON.parse(user);
+    //   const getMongoUser = async (user: fUser): Promise<void> => {
+    //     const mongoUser = await getUserByEmailAddress(user.email!);
+    //     if (mongoUser) {
+    //       setCurrentUser(parsedUser);
+    //       setCurrentMongoUser(mongoUser);
+    //     }
+    //     setLoading(false);
+    //   };
+    //   getMongoUser(parsedUser);
+    // } else {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      console.log('Auth state changed with user: ', user);
+      setLoading(true);
+      if (!user) {
+        setCurrentUser(null);
+        setCurrentMongoUser(null);
+        localStorage.removeItem('user');
+      } else {
+        try {
+          const lsUser = localStorage.getItem('user');
+          console.log('User in localstorage ', user);
+          if (lsUser) {
+            // console.log('Found user in localstorage', user);
+            const parsedUser = JSON.parse(lsUser);
+            const getMongoUser = async (user: fUser): Promise<void> => {
+              const lsMongoUser = await getUserByEmailAddress(user.email!);
+              if (lsMongoUser) {
+                setCurrentUser(parsedUser);
+                setCurrentMongoUser(lsMongoUser);
+              }
+              setLoading(false);
+            };
+            getMongoUser(parsedUser);
           }
+          const mongoUser = await getUserByEmailAddress(user.email!);
+          console.log('Mongo user found: ', mongoUser);
+          if (mongoUser) {
+            localStorage.setItem('user', JSON.stringify(user));
+            setCurrentUser(user);
+            setCurrentMongoUser(mongoUser);
+          } else {
+            setUserSigningUp(user);
+          }
+        } catch (e) {
+          console.log(e);
         }
-        setLoading(false);
-      });
-      return unsubscribe;
-    }
+      }
+      setLoading(false);
+    });
+    return unsubscribe;
+    // }
   }, []);
 
   const value: AuthContextType = {

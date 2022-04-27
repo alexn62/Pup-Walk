@@ -164,6 +164,7 @@ const AddJob = () => {
             <label>
               Title:
               <input
+                autoComplete="off"
                 placeholder="Quick walk around the block..."
                 {...register('title', { required: true })}
                 className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${
@@ -208,6 +209,7 @@ const AddJob = () => {
               Duration:
               <div className="flex flex-row items-center space-x-2">
                 <input
+                  autoComplete="off"
                   disabled={durationOptions.some((el) => el.active)}
                   type="number"
                   placeholder="45"

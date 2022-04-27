@@ -47,6 +47,7 @@ const AddDog = () => {
           <p>{error?.toString()}</p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
+              autoComplete="off"
               disabled={loading && !data}
               placeholder="Name"
               {...register('name', { required: true })}
@@ -57,6 +58,7 @@ const AddDog = () => {
             {errors.name && <span className="text-xs text-red-400 mt-1 mr-auto">This field is required</span>}
 
             <input
+              autoComplete="off"
               {...register('breed', { required: true })}
               disabled={loading && !data}
               placeholder="Breed"
@@ -66,6 +68,7 @@ const AddDog = () => {
             ></input>
             {errors.breed && <span className="text-xs text-red-400 mt-1  mr-auto">This field is required</span>}
             <textarea
+              autoComplete="off"
               {...register('description', { required: true })}
               disabled={loading && !data}
               placeholder="Description"
@@ -76,6 +79,7 @@ const AddDog = () => {
             {errors.breed && <span className="text-xs text-red-400 mt-1  mr-auto">This field is required</span>}
 
             <input
+              autoComplete="off"
               type={'number'}
               {...register('age', { required: true })}
               disabled={loading && !data}

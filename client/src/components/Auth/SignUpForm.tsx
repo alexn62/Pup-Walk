@@ -39,6 +39,7 @@ const SignUpForm = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col space-y-1">
             <input
+              autoComplete="off"
               placeholder="Email"
               {...register('email', { required: true })}
               className={`w-full rounded-md border focus:border-kBlue p-2 my-1 text-sm focus:outline-none ${

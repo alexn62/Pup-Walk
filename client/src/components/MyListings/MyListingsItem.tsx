@@ -6,6 +6,7 @@ import { HiLocationMarker, HiOutlineClock } from 'react-icons/hi';
 import * as jobQueries from '../../services/queries/JobQueries';
 import { Job } from '../../interfaces/interfaces';
 import MainButton from '../Shared/MainButton';
+import userFallback from '../../assets/images/user.png';
 
 const MyListingsItem = ({ job }: { job: Job }) => {
   const [thisJob, setThisJob] = useState<Job>();
@@ -60,7 +61,14 @@ const MyListingsItem = ({ job }: { job: Job }) => {
               <div key={thisJob.acceptedUser.firstName} className="flex font-semibold justify-between my-1">
                 <div className="flex justify-start space-x-2 items-center">
                   <div>{thisJob.acceptedUser.firstName}</div>
-                  <div className="w-6 h-6 rounded-full bg-kBlueLight"></div>
+                  <div className="h-5 w-5 bg-kBlueLight rounded-full ml-2 overflow-hidden">
+                    <img
+                      src={job.acceptedUser?.profilePhoto ?? userFallback}
+                      placeholder={userFallback}
+                      alt="Accepted User"
+                      className="object-cover "
+                    ></img>
+                  </div>{' '}
                 </div>
               </div>
             </div>
@@ -90,7 +98,14 @@ const MyListingsItem = ({ job }: { job: Job }) => {
                 {thisJob.candidates.map((applicant) => (
                   <div key={applicant.firstName} className="flex font-semibold justify-between my-1">
                     <div className="flex justify-start space-x-2 items-center">
-                      <div className="w-6 h-6 rounded-full bg-kBlueLight"></div>
+                      <div className="h-5 w-5 bg-kBlueLight rounded-full ml-2 overflow-hidden">
+                        <img
+                          src={applicant.profilePhoto ?? userFallback}
+                          placeholder={userFallback}
+                          alt="User"
+                          className="object-cover "
+                        ></img>
+                      </div>
                       <div>{applicant.firstName}</div>
                     </div>
                     <div className="flex justify-end space-x-2">
